@@ -1,0 +1,315 @@
+html, body {
+  height: 100vh;
+  margin: 0;
+  overflow: hidden;
+  font-family: 'Roboto', sans-serif;
+}
+
+.loading-indicator {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: rgba(0, 0, 0, 0.7);
+  color: white;
+  padding: 20px 30px;
+  border-radius: 8px;
+  z-index: 1000;
+}
+
+.city-select {
+  border: none;
+  width: var(--select-width, 100px); /* JS буде оновлювати */
+  background: transparent;
+  font-weight: bold;
+  font-size: inherit;
+  color: inherit;
+  cursor: pointer;
+}
+
+
+.no-results-message {
+  text-align: center;
+  padding: 40px;
+  margin: 20px 0;
+  background-color: #f8f9fa;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.no-results-message h3 {
+  color: #dc3545;
+  margin-bottom: 10px;
+}
+
+.no-results-message p {
+  color: #6c757d;
+}
+
+/* Загальний контейнер */
+.booking-page {
+  display: flex;
+  height: 100vh;
+  overflow: hidden;
+  background-color: #55787e;
+}
+
+/* Ліва секція */
+.left-section {
+  flex: 3;
+  margin-top: 16px;
+  padding: 0 20px;
+  height: calc(100vh - 70px);
+  overflow-y: auto;
+  scrollbar-width: auto;
+  scrollbar-color: #55787e transparent;
+}
+
+.left-section::-webkit-scrollbar {
+  width: 10px;
+}
+
+.left-section::-webkit-scrollbar-track {
+  background: #e0e0e0;
+  border-radius: 4px;
+}
+
+.left-section::-webkit-scrollbar-thumb {
+  background-color: #55787e;
+  border-radius: 4px;
+}
+
+/* Права секція */
+.right-section {
+  flex: 2;
+  height: 100vh;
+  position: sticky;
+  top: 0;
+}
+
+.leaflet-container {
+  height: 100%;
+  width: 100%;
+}
+
+/* Назва міста */
+.city-name {
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 12px;
+  color: #000;
+}
+
+/* Поля пошуку */
+.search-fields {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+
+}
+
+.search-input {
+  padding: 10px;
+  border: none;
+  border-radius: 8px;
+  width: 100%;
+  font-size: 18px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.results-count {
+  margin: 16px 0;
+  font-size: 14px;
+  color: #fff;
+}
+
+
+/* СТИЛІ ДЛЯ НОВОЇ КАРТКИ */
+.card {
+  background-color: #55787e;
+  border-radius: 20px;
+  flex-direction: row; /* гарантує розміщення зліва направо */
+  padding: 16px;
+  margin-bottom: 20px;
+  display: flex;
+  gap: 20px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  align-items: flex-start;
+}
+
+/* Зображення та бейджі */
+.card-image-container {
+  flex-shrink: 0; /* щоб не стискалося */
+  width: 326px;
+  height: 190px;
+  position: relative;
+}
+
+.image-badges {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.badge {
+  padding: 4px 10px;
+  border-radius: 12px;
+  color: white;
+  font-size: 12px;
+  font-weight: bold;
+  width: fit-content;
+}
+
+.badge.red {
+  background-color: #e53935;
+}
+
+.badge.yellow {
+  background-color: #fbc02d;
+  color: #000;
+}
+
+.card-image {
+  width: 100%;
+  height: 100%;
+  border-radius: 12px;
+  object-fit: cover;
+}
+
+/* Інформація */
+.card-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  font-size: 14px;
+  gap: 8px;
+  color: #000;
+}
+
+.card-info h3 {
+  margin: 0;
+  font-size: 20px;
+  color: #333;
+}
+
+/* Теги */
+.tags {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.tag {
+  background-color: #f0f0f0;
+  border-radius: 14px;
+  padding: 4px 10px;
+  font-size: 13px;
+  font-weight: 500;
+}
+
+/* Попередження */
+.alert {
+  font-size: 13px;
+  color: #d32f2f;
+  background-color: #fff3f3;
+  border-left: 4px solid #d32f2f;
+  padding: 8px 12px;
+  border-radius: 8px;
+}
+
+/* Примітка швидкого бронювання */
+.fast-booking-note {
+  font-size: 14px;
+  background-color: #f3f3f3;
+  padding: 10px;
+  border-radius: 10px;
+  color: #333;
+  margin-top: 10px;
+}
+
+/* Кнопка бронювання */
+.book-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: #e3e3e3c8;
+  padding: 10px 14px;
+  border-radius: 12px;
+  font-weight: 600;
+  font-size: 15px;
+  width: 100%;
+
+  border: none;
+  cursor: pointer;
+  margin-top: 10px;
+  transition: background-color 0.3s ease;
+}
+
+.book-button:hover {
+  background-color: #d0d0d0;
+}
+
+.book-button span {
+  margin-right: 12px;
+}
+
+/* Варіант для кнопки з іконкою ⚡ */
+.book-button.full {
+  background-color: #3d5afe;
+  color: white;
+  margin-top: 12px;
+  font-size: 16px;
+  font-weight: 600;
+  justify-content: center;
+  padding: 12px;
+}
+
+.book-button.full:hover {
+  background-color: #2a47c2;
+}
+
+.show-on-map-button {
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 15px;
+  cursor: pointer;
+  font-size: 14px;
+  margin-left: 10px;
+  transition: background-color 0.3s;
+}
+
+.show-on-map-button:hover {
+  background-color: #45a049;
+}
+
+/* Пагінація */
+.pagination {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  margin-top: 20px;
+  margin-bottom: 120px;
+}
+
+.pagination button {
+  padding: 8px 12px;
+  border-radius: 6px;
+  border: none;
+  background-color: #ccc;
+  cursor: pointer;
+}
+
+.pagination .active {
+  background-color: #4f8bfc;
+  color: #fff;
+}
+
+.pagination button:hover {
+  background-color: #aaa;
+}

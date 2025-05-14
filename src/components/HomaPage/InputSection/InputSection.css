@@ -1,0 +1,166 @@
+
+.inputSection {
+    margin-top: 168px;
+    margin-left: 164px;
+    display: flex;
+    flex-wrap: wrap; /* Дозволяє переносити елементи */
+    gap: 44px; /* Відступ між елементами */
+    width: 800px;
+    height: 160px;
+    margin-right: 164px;
+}
+
+.select-container {
+    position: relative;
+    width: 258px;
+    align-items: left;
+}
+.select-container2 {
+    position: relative;
+    width: 480px;
+    /* align-items: left; */
+}
+
+.select-container img {
+    width: 20px;
+    height: 20px;
+    margin-right: 6px;
+}
+
+.select-box {
+    background: #eef;
+    color: #0a0a0a;
+    padding: 0px 12px;
+    border-radius: 15px;
+    cursor: pointer;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    font-weight: bold;
+    width: 234px;
+    appearance: listbox;
+    height: 54.2px;
+}
+
+.select-box:hover {
+    background: #dde;
+}
+
+.select-dropdown {
+    display: none;
+    position: absolute;
+    width: 100%;
+    background: white;
+    border-radius: 30px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    margin-top: 5px;
+    padding: 5px 0;
+    z-index: 100;
+    max-height: 200px;
+    overflow-y: auto;
+}
+
+.select-dropdown.show {
+    display: block;
+    width: 100%;
+}
+
+.select-dropdown li {
+    list-style: none;
+    color: #0a0a0a;
+    padding: 10px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 16px;
+    width: 238px;
+}
+
+.select-dropdown li:hover {
+    background: #eef;
+}
+
+.select-dropdown li img {
+    width: 20px;
+    height: 20px;
+}
+
+
+.enterClubOrAddress{
+    margin-left: 44px;
+    width: 480px; 
+    height: 51px;
+    padding: 12px;
+    background: #eef;
+    border-radius: 15px;
+    color: black;
+    height: 54.2px;
+    font-size: 18px;
+    box-sizing: border-box;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.find-box {
+    background: #eef;
+    color: #0a0a0a;
+    border-radius: 15px;
+    display: flex;
+    align-items: center;
+    width: 100%;
+    height: 54px;
+    padding: 0 15px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    gap: 10px; /* Відступ між іконкою та інпутом */
+    cursor: text;
+}
+
+.search-icon {
+    width: 22px;
+    height: 22px;
+    opacity: 0.6;
+}
+
+.search-input {
+    flex-grow: 1; /* Заповнює всю доступну ширину */
+    background: transparent;
+    border: none;
+    outline: none;
+    font-size: 16px;
+    color: black;
+}
+
+.select-container-date {
+    display: block; /* Змінюємо на block, щоб перенести на новий рядок */
+    
+}
+
+.select-container-date input[type="date"] {
+    width: 171px; /* Ширина, аналогічна до .select-box */
+    height: 51px;
+    padding: 0 12px;
+    background: #eef;
+    border-radius: 15px;
+    border: none;
+    font-size: 16px;
+    color: #0a0a0a;
+    font-weight: bold;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+}
+
+.select-container-date input[type="date"]:hover {
+    background: #dde;
+}
+
+/* Стилі для календаря (псевдоелементи) */
+.select-container-date input[type="date"]::-webkit-calendar-picker-indicator {
+    filter: invert(0.5); /* Колір іконки календаря */
+    cursor: pointer;
+    padding: 5px;
+}
+
+.select-container-date input[type="date"]:focus {
+    outline: none;
+    background: #eef;
+}

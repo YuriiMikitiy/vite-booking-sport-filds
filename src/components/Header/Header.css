@@ -1,0 +1,110 @@
+.header{
+    width: 100vw;
+    height: 82px;
+    display: flex;
+    position: sticky; /* Робить хедер "липким" */
+    top: 0; /* Відстань від верху, де хедер буде прилипати */
+    z-index: 100; /* Забезпечує, що хедер буде над іншим контентом */
+    background-color: transparent; /* Додайте фон, щоб контент не просвічував під хедером */
+}
+
+
+
+.header-logo {
+  width: 5rem; /* Змінюй на потрібний розмір */
+  height: 5rem; /* Щоб зберегти пропорції */
+  margin-left: 2rem;
+  margin-top: 6px;
+  margin-right: 0px;
+}
+
+.header-logo-name {
+  font-family: "Roboto", sans-serif;
+  font-weight: 400;
+  font-size: 18px;
+  line-height: 150%;
+  color: #000;
+  margin-left: 0.5rem;
+  font-weight: bold;
+}
+
+.nav-list {
+    color: #0d2a1c;
+    list-style: none;  /* Прибирає маркери списку */
+    padding: 0;
+    display: flex;
+    margin-top: 1.625rem;
+    font-weight: 700;
+    width: 100vw;
+    /* margin-right: 1px; */
+  }
+
+.nav-list li {
+    margin-right: 20px; /* Додає відступи між пунктами */
+    font-size: 20px;
+  }
+  .nav-list a {
+    color: inherit; /* Робить колір тексту таким же, як у батьківського елемента */
+    text-decoration: none;
+  }
+  
+  .nav-list a:hover {
+    color: #6abc12; /* Темніший відтінок при наведенні */
+  }
+
+.buttonSection{
+    margin-left: auto; /* Заповнює весь доступний простір між елементами */
+    margin-right: 16px; /* Відступ справа */
+  }
+
+  .buttonSection button{
+    margin-left: 1rem;
+  }
+.user-menu {
+  position: relative;
+  display: inline-block;
+}
+
+.user-menu-button {
+  border: 1px solid #000;
+  border-radius: 7px;
+  padding: 8px 20px;
+  background: #7fa200;
+  font-family: "Roboto", sans-serif;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 150%;
+  color: #000;
+  cursor: pointer;
+}
+
+.user-menu-dropdown {
+  display: none;
+  position: absolute;
+  right: 0;
+  background-color: #f9f9f9;
+  min-width: 160px;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  z-index: 1;
+  border-radius: 7px;
+}
+
+.user-menu-dropdown button {
+  color: black;
+  padding: 12px 16px;
+  text-decoration: none;
+  display: block;
+  width: 100%;
+  text-align: left;
+  border: none;
+  background: none;
+  cursor: pointer;
+}
+
+.user-menu-dropdown button:hover {
+  background-color: #ddd;
+}
+
+.user-menu:hover .user-menu-dropdown {
+  display: block;
+}

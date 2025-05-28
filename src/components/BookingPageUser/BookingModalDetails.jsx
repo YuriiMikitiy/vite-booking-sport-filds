@@ -35,7 +35,6 @@ export default function BookingModalconfirmation({ court, bookingInfo, onClose }
         <h3>{bookingInfo.court || bookingInfo.title}</h3>
         <p><strong>Локація:</strong> {bookingInfo.sportsField.location?.address || bookingInfo.location}</p>
         <p><strong>Вид спорту:</strong> {getCorrectType(court.type).name}</p>
-        <p><strong>Дата:</strong> {bookingInfo.date}</p>
         <p><strong>Час:</strong> {formatTime(startTime)} - {formatTime(endTime)}</p>
         <p><strong>Вартість:</strong> {bookingInfo.totalPrice} грн</p>
         <p className="notice">Клуб може змінити вартість послуги</p>

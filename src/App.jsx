@@ -21,7 +21,7 @@ function App() {
             <Route path="/bookingByUse" element={<BookingPageUser />} />
           </Routes>
         </main>
-        <Footer/>
+        {/* <Footer/> */}
       </div>
     </Router>
   );

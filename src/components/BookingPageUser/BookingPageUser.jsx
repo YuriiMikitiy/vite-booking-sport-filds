@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState, useCallback, useRef } from "react";
 import "./BookingPageUser.css";
 import { MapContainer, TileLayer, Marker, Popup, useMap } from "react-leaflet";
@@ -141,7 +140,7 @@ export default function BookingPageUser() {
       
       setTimeout(() => {
         setHighlightedMarker(null);
-      }, 3000);
+      }, 60000);
     } catch (error) {
       console.error("Помилка при показі на карті:", error);
     }
@@ -164,7 +163,7 @@ export default function BookingPageUser() {
         ) : (
           <div style={{ marginBottom: '50px' }}>
             {bookings.map((booking) => (
-              <div className="card" key={booking.id}>
+              <div className="card-user" key={booking.id}>
                 <div className="card-image-container">
                   <img
                     src={booking.sportsField.imageUrl || "/src/assets/images/default-court.jpg"}
@@ -193,20 +192,21 @@ export default function BookingPageUser() {
                   {booking.comment && <p className="comment">Коментар: {booking.comment}</p>}
                   <div className="booking-actions">
                     <button
-                      className="show-on-map-button"
+                      className="show-on-map-button-user"
                       onClick={() => handleShowOnMap(booking)}
                     >
                       Показати на карті
                     </button>
                     <button
                       className="cancel-button"
+                      style={{marginLeft: '1rem'}}
                       onClick={() => handleDeleteBooking(booking.id)}
                       disabled={deletingId === booking.id}
                     >
                       {deletingId === booking.id ? 'Скасування...' : 'Скасувати бронювання'}
                     </button>
                     <button
-                      className="book-button"
+                      className="book-button-details"
                       onClick={() => setSelectedBooking(booking)}
                     >
                       Деталі бронювання

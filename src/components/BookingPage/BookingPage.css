@@ -276,7 +276,8 @@ html, body {
   background-color: #4CAF50;
   color: white;
   border: none;
-  padding: 8px 16px;
+  margin-top: 10px;
+  padding: 10px 14px;
   border-radius: 15px;
   cursor: pointer;
   font-size: 14px;
@@ -312,4 +313,16 @@ html, body {
 
 .pagination button:hover {
   background-color: #aaa;
+}
+
+@media (max-width: 768px) {
+  .booking-page {
+    flex-direction: column;
+  }
+  .left-section, .right-section {
+    width: 100%;
+  }
+  .right-section {
+    margin-top: 20px;
+  }
 }

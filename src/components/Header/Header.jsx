@@ -5,7 +5,7 @@ import UserProfileModal from "./UserProfileModal";
 import axios from "axios";
 
 export default function Header() {
-  const [language, setLanguage] = useState("uk");
+  // const [language, setLanguage] = useState("uk");
   const [isLoggedIn, setIsLoggedIn] = useState(() => {
     // Ініціалізуємо стан з localStorage
     return localStorage.getItem('isLoggedIn') === 'true';
@@ -16,9 +16,9 @@ export default function Header() {
   const navigate = useNavigate();
 
 
-  const handleLanguageChange = (lang) => {
-    setLanguage(lang);
-  };
+  // const handleLanguageChange = (lang) => {
+  //   setLanguage(lang);
+  // };
 
   const handleProfileClick = async () => {
     try {
@@ -67,7 +67,7 @@ export default function Header() {
         <li>
           <a href="/">Контакти</a>
         </li>
-        <li>
+        {/* <li>
           <select
             style={{
               backgroundColor: '#55787e',
@@ -80,7 +80,7 @@ export default function Header() {
             <option value="en">Eng</option>
             <option value="fr">Fr</option>
           </select>
-        </li>
+        </li> */}
         <div className="buttonSection">
           {isLoggedIn ? (
             <div className="user-menu">

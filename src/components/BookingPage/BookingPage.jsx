@@ -7,6 +7,7 @@ import L from "leaflet";
 import CustomDropdown from "../HomaPage/InputSection/CustomDropdown.jsx";
 import BookingModalconfirmation from "./BookingModalconfirmation";
 import BookingModalChooseServices from "./BookingModalChoseServices.jsx";
+import CourtCard from "../BookingPage/componentsBookingPage/CourtCard/CourtCard.jsx";
 
 // Fix for default marker icons
 import markerIcon2x from "leaflet/dist/images/marker-icon-2x.png";
@@ -37,7 +38,11 @@ const cities = [
   { ua: "Одеса", en: "Odesa", coordinates: [46.4825, 30.7233] },
   { ua: "Харків", en: "Kharkiv", coordinates: [49.9935, 36.2304] },
   { ua: "Дніпро", en: "Dnipro", coordinates: [48.4647, 35.0462] },
-  { ua: "Івано-Франківськ", en: "Ivano-Frankivsk", coordinates: [48.9226, 24.7111] },
+  {
+    ua: "Івано-Франківськ",
+    en: "Ivano-Frankivsk",
+    coordinates: [48.9226, 24.7111],
+  },
   { ua: "Полтава", en: "Poltava", coordinates: [49.5883, 34.5514] },
   { ua: "Суми", en: "Sumy", coordinates: [50.9077, 34.7981] },
   { ua: "Тернопіль", en: "Ternopil", coordinates: [49.5535, 25.5948] },
@@ -60,7 +65,7 @@ function getCorrectVariantWord(count) {
   }
 }
 
-function getCorrectType(type) {
+export function getCorrectType(type) {
   return sports[type] ?? { name: "Unknown", icon: "" };
 }
 
@@ -112,7 +117,10 @@ export default function BookingPage() {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
         (position) => {
-          setUserLocation([position.coords.latitude, position.coords.longitude]);
+          setUserLocation([
+            position.coords.latitude,
+            position.coords.longitude,
+          ]);
           setMapCenter([position.coords.latitude, position.coords.longitude]);
         },
         (error) => {
@@ -314,7 +322,10 @@ export default function BookingPage() {
       <div className="left-section">
         <h2>
           <img
-            src={getCorrectType(sportFild.type)?.icon || "/src/assets/images/default-sport.png"}
+            src={
+              getCorrectType(sportFild.type)?.icon ||
+              "/src/assets/images/default-sport.png"
+            }
             alt={selectedSport.name}
             width="30"
           />
@@ -349,7 +360,9 @@ export default function BookingPage() {
             >
               <div style={{ display: "flex", alignItems: "center" }}>
                 <img
-                  src={selectedSport.icon || "/src/assets/images/default-sport.png"}
+                  src={
+                    selectedSport.icon || "/src/assets/images/default-sport.png"
+                  }
                   alt={selectedSport.name}
                   className="selected-icon"
                 />
@@ -377,7 +390,11 @@ export default function BookingPage() {
                     setIsOpen(false);
                   }}
                 >
-                  <img src={sport.icon || "/src/assets/images/default-sport.png"} alt={sport.name} /> {sport.name}
+                  <img
+                    src={sport.icon || "/src/assets/images/default-sport.png"}
+                    alt={sport.name}
+                  />{" "}
+                  {sport.name}
                 </li>
               ))}
             </ul>
@@ -419,15 +436,25 @@ export default function BookingPage() {
         ) : (
           <>
             <p className="results-count">
-              Ми знайшли {sportFild.length} {getCorrectVariantWord(sportFild.length)}
+              Ми знайшли {sportFild.length}{" "}
+              {getCorrectVariantWord(sportFild.length)}
             </p>
 
-            <div style={{ marginBottom: '50px' }}>
+            <CourtCard
+              courts={currentItems}
+              selectedSport={selectedSport}
+              setSelectedCourt={setSelectedCourt}
+              setSelectedSportType={setSelectedSportType}
+              handleShowOnMap={handleShowOnMap}
+            />
+            {/* <div style={{ marginBottom: "50px" }}>
               {currentItems.map((court) => (
                 <div className="card" key={court.id}>
                   <div className="card-image-container">
                     <img
-                      src={court.imageUrl || "/src/assets/images/default-court.jpg"}
+                      src={
+                        court.imageUrl || "/src/assets/images/default-court.jpg"
+                      }
                       alt={court.title}
                       className="card-image"
                     />
@@ -442,21 +469,30 @@ export default function BookingPage() {
                     <div className="tags">
                       <span className="tag">
                         <img
-                          src={getCorrectType(court.type)?.icon || "/src/assets/images/default-sport.png"}
+                          src={
+                            getCorrectType(court.type)?.icon ||
+                            "/src/assets/images/default-sport.png"
+                          }
                           alt={selectedSport.name}
                           width="20"
                         />{" "}
                         {getCorrectType(court.type)?.name || "Спорт"}
                       </span>
                     </div>
-                    <p className="warning">
-                      {court.warningInformation &&
-                        `⚠️${court.warningInformation}`}
-                    </p>
+                    {court.warningInformation && (
+                      <p className="warning">⚠️{court.warningInformation}</p>
+                    )}
                     <p className="description">
-                      У цьому клубі можна забронювати корт менше ніж за 1 хвилину
+                      У цьому клубі можна забронювати корт менше ніж за 1
+                      хвилину
                     </p>
-                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                    <div
+                      style={{
+                        display: "flex",
+                        justifyContent: "space-between",
+                        alignItems: "center",
+                      }}
+                    >
                       <button
                         className="book-button highlight"
                         onClick={() => {
@@ -464,11 +500,26 @@ export default function BookingPage() {
                           setSelectedSportType(selectedSport.name);
                         }}
                       >
-                        ⚡ Забронювати майданчик у кілька кліків тут → <div style={{ backgroundColor: "Blue", padding: '8px', borderRadius: '15px', margin: '0px' }}>Забронювати</div>
+                        ⚡ Забронювати майданчик у кілька кліків тут →{" "}
+                        <div
+                          style={{
+                            backgroundColor: "Blue",
+                            padding: "8px",
+                            borderRadius: "15px",
+                            margin: "0px",
+                          }}
+                        >
+                          Забронювати
+                        </div>
                       </button>
                       <button
                         className="show-on-map-button"
-                        onClick={() => handleShowOnMap([court.location.latitude, court.location.longitude])}
+                        onClick={() =>
+                          handleShowOnMap([
+                            court.location.latitude,
+                            court.location.longitude,
+                          ])
+                        }
                       >
                         Показати на карті
                       </button>
@@ -476,7 +527,7 @@ export default function BookingPage() {
                   </div>
                 </div>
               ))}
-            </div>
+            </div> */}
 
             {sportFild.length > itemsPerPage && (
               <div className="pagination">
@@ -518,7 +569,7 @@ export default function BookingPage() {
             onConfirm={(details) => {
               setBookingDetails({
                 court: selectedCourt,
-                bookingInfo: details
+                bookingInfo: details,
               });
               setSelectedCourt(null);
             }}
@@ -532,7 +583,6 @@ export default function BookingPage() {
             onClose={() => setBookingDetails(null)}
           />
         )}
-
       </div>
 
       <div className="right-section">
@@ -546,7 +596,9 @@ export default function BookingPage() {
             borderRadius: "15px",
             marginTop: "24px",
           }}
-          whenCreated={(map) => { mapRef.current = map }}
+          whenCreated={(map) => {
+            mapRef.current = map;
+          }}
           key={`${mapCenter[0]}-${mapCenter[1]}`}
         >
           <ChangeView center={mapCenter} zoom={13} />

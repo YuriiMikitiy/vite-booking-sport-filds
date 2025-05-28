@@ -1,0 +1,27 @@
+.results-count {
+  margin: 16px 0;
+  font-size: 14px;
+  color: #fff;
+}
+
+.courts-list {
+  margin-bottom: 50px;
+}
+
+.no-results-message {
+  text-align: center;
+  padding: 40px;
+  margin: 20px 0;
+  background-color: #f8f9fa;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.no-results-message h3 {
+  color: #dc3545;
+  margin-bottom: 10px;
+}
+
+.no-results-message p {
+  color: #6c757d;
+}

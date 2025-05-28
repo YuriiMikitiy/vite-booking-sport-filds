@@ -1,17 +1,4 @@
-// import axios from "axios"
 
-// export const fetchSportFild = async () =>
-// {
-//     try {
-//         var response = await axios.get('https://localhost:44313/api/SportsFields'
-//         );
-
-//         return response.data;
-//     } catch (error) {
-//         console.log(error)
-//     }
-    
-// }
 import axios from "axios";
 
 const API_BASE_URL = 'https://localhost:44313/api/SportsFields';

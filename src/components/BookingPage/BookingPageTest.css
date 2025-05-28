@@ -1,0 +1,56 @@
+html, body {
+  height: 100vh;
+  margin: 0;
+  overflow: hidden;
+  font-family: 'Roboto', sans-serif;
+}
+
+.loading-indicator {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: rgba(0, 0, 0, 0.7);
+  color: white;
+  padding: 20px 30px;
+  border-radius: 8px;
+  z-index: 1000;
+}
+
+.booking-page {
+  display: flex;
+  height: 100vh;
+  overflow: hidden;
+  background-color: #55787e;
+}
+
+.left-section {
+  flex: 3;
+  margin-top: 16px;
+  padding: 0 20px;
+  height: calc(100vh - 70px);
+  overflow-y: auto;
+  scrollbar-width: auto;
+  scrollbar-color: #55787e transparent;
+}
+
+.left-section::-webkit-scrollbar {
+  width: 10px;
+}
+
+.left-section::-webkit-scrollbar-track {
+  background: #e0e0e0;
+  border-radius: 4px;
+}
+
+.left-section::-webkit-scrollbar-thumb {
+  background-color: #55787e;
+  border-radius: 4px;
+}
+
+.right-section {
+  flex: 2;
+  height: 100vh;
+  position: sticky;
+  top: 0;
+}

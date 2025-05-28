@@ -7,6 +7,7 @@ import IconYoutube from "./IconYoutube";
 
 export default function Footer() {
   return (
+    <>
     <div className="flex flex-col justify-end gap-8 bg-white pb-[38px] pl-[59px] pr-16 pt-[76px]">
       <div className="flex flex-wrap items-start justify-center gap-x-32 gap-y-[90px] min-[1350px]:flex-nowrap">
         <div className="flex flex-col items-center gap-[11px]">
@@ -135,5 +136,6 @@ export default function Footer() {
         </div>
       </div>
     </div>
+    </>
   );
 }

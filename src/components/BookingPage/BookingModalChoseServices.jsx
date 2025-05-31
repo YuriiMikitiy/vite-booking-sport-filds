@@ -29,17 +29,23 @@ export default function BookingModalChooseServices({ court, onClose, sportType, 
     };
   }, [onClose]);
 
-  // Отримуємо доступні слоти при зміні дати
+  // Fetch available slots when date changes
   useEffect(() => {
     if (!date) return;
-    
+
     const fetchAvailableSlots = async () => {
       setLoading(true);
       try {
         const response = await axios.get(
           `https://localhost:44313/api/Booking/available-slots/${court.id}/${date}`
         );
-        setAvailableSlots(response.data);
+        // Фільтруємо слоти, щоб показувати лише майбутні
+        const now = new Date();
+        const filteredSlots = response.data.filter(slot => {
+          const slotStartTime = new Date(slot.startTime);
+          return slotStartTime > now;
+        });
+        setAvailableSlots(filteredSlots);
         setError("");
       } catch (err) {
         setError("Не вдалося завантажити доступні години");
@@ -62,13 +68,27 @@ export default function BookingModalChooseServices({ court, onClose, sportType, 
     }
 
     try {
-      const startTime = new Date(`${date}T${time}:00`);
+      // Створюємо startTime як UTC
+      const startTime = new Date(`${date}T${time}:00Z`);
+      if (isNaN(startTime.getTime())) {
+        setError("Некоректна дата або час");
+        return;
+      }
+
+      // Calculate end time for validation and display
+      const endTime = new Date(startTime.getTime() + duration * 60 * 60 * 1000);
+
+      // Логування для дебагу
+      console.log("Start Time (UTC):", startTime.toISOString());
+      console.log("End Time (UTC):", endTime.toISOString());
+
+      // Check availability with the backend
       const response = await axios.post(
         "https://localhost:44313/api/Booking/check-availability",
         {
           sportsFieldId: court.id,
           startTime: startTime.toISOString(),
-          durationMinutes: duration * 60
+          durationMinutes: duration * 60,
         }
       );
 
@@ -82,19 +102,20 @@ export default function BookingModalChooseServices({ court, onClose, sportType, 
           time,
           duration,
           totalPrice,
+          endTime: endTime.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit", timeZone: "UTC" }),
         });
       } else {
-        setError("Обраний час вже зайнятий. Спробуйте інший.");
+        setError("Обраний час уже зайнятий. Спробуйте інший.");
       }
     } catch (err) {
-      setError(err.response?.data || "Помилка бронювання");
+      setError(err.response?.data?.message || "Помилка бронювання");
     }
   };
 
   const getNext7Days = () => {
     const days = [];
     const options = { weekday: "long", day: "numeric", month: "long" };
-  
+
     for (let i = 0; i < 7; i++) {
       const d = new Date();
       d.setDate(d.getDate() + i);
@@ -102,13 +123,23 @@ export default function BookingModalChooseServices({ court, onClose, sportType, 
       const value = d.toISOString().split("T")[0];
       days.push({ label, value });
     }
-  
+
     return days;
   };
 
   const formatTimeSlot = (slot) => {
-    return new Date(slot.startTime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    return new Date(slot.startTime).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
   };
+
+  // Calculate end time for display
+  const startTime = time ? new Date(`${date}T${time}:00Z`) : null;
+  const endTime = startTime
+    ? new Date(startTime.getTime() + duration * 60 * 60 * 1000).toLocaleTimeString([], {
+        hour: "2-digit",
+        minute: "2-digit",
+        timeZone: "UTC",
+      })
+    : "";
 
   const totalPrice = duration * court.pricePerHour;
 
@@ -133,7 +164,9 @@ export default function BookingModalChooseServices({ court, onClose, sportType, 
             }}
             required
           >
-            <option value="" disabled>Оберіть дату</option>
+            <option value="" disabled>
+              Оберіть дату
+            </option>
             {getNext7Days().map((d) => (
               <option key={d.value} value={d.value}>
                 {d.label.charAt(0).toUpperCase() + d.label.slice(1)}
@@ -149,7 +182,9 @@ export default function BookingModalChooseServices({ court, onClose, sportType, 
             required
             disabled={!date || loading}
           >
-            <option value="" disabled>Оберіть час</option>
+            <option value="" disabled>
+              Оберіть час
+            </option>
             {availableSlots.map((slot) => (
               <option key={slot.startTime} value={formatTimeSlot(slot)}>
                 {formatTimeSlot(slot)}
@@ -171,19 +206,21 @@ export default function BookingModalChooseServices({ court, onClose, sportType, 
             ))}
           </select>
 
+          {time && <p>Час бронювання: {time} - {endTime}</p>}
+
           <p>Ціна за годину: {court.pricePerHour} грн</p>
-          <p>Загальна вартість: <strong>{totalPrice} грн</strong></p>
-          <p><em>Клуб може змінити вартість послуги</em></p>
+          <p>
+            Загальна вартість: <strong>{totalPrice} грн</strong>
+          </p>
+          <p>
+            <em>Клуб може змінити вартість послуги</em>
+          </p>
 
           <div className="modal-buttons">
             <button type="submit" className="submit-button" disabled={loading}>
               Підтвердити та ввести контактні дані
             </button>
-            <button
-              type="button"
-              className="cancel-button"
-              onClick={onClose}
-            >
+            <button type="button" className="cancel-button" onClick={onClose}>
               Скасувати
             </button>
           </div>
@@ -192,6 +229,13 @@ export default function BookingModalChooseServices({ court, onClose, sportType, 
     </div>
   );
 }
+
+
+
+
+
+
+//----------------------------------------------------------------------------------------------
 
 // import React, { useEffect, useRef, useState } from "react";
 // import "./BookingModalconfirmation.css";

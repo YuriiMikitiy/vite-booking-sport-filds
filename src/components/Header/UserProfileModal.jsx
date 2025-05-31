@@ -1,3 +1,5 @@
+
+
 import React, { useEffect, useRef } from "react";
 import "./UserProfileModal.css";
 
@@ -28,15 +30,15 @@ export default function UserProfileModal({ user, onClose }) {
           </li> */}
           <li>
             <strong>ПІБ:</strong> {user.fullName}{" "}
-            <button onClick={() => alert("Зміна ПІБ буде додана пізніше")}>Змінити</button>
+            <button className="action-btn" onClick={() => alert("Зміна ПІБ буде додана пізніше")}>Змінити</button>
           </li>
           <li>
             <strong>Email:</strong> {user.email}{" "}
-            <button onClick={() => alert("Зміна Email буде додана пізніше")}>Змінити</button>
+            <button className="action-btn"  onClick={() => alert("Зміна Email буде додана пізніше")}>Змінити</button>
           </li>
           <li>
             <strong>Телефон:</strong> {user.phoneNumber}{" "}
-            <button onClick={() => alert("Зміна телефону буде додана пізніше")}>Змінити</button>
+            <button className="action-btn"  onClick={() => alert("Зміна телефону буде додана пізніше")}>Змінити</button>
           </li>
           <li>
             <strong>Роль:</strong> {user.role==1 ? "Користувач" : "Адміністратор Майданчика"}

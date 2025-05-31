@@ -10,10 +10,12 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "autoprefixer": "^10.4.20",
     "axios": "^1.9.0",
     "bootstrap": "^5.3.3",
     "leaflet": "^1.9.4",
     "lucide-react": "^0.487.0",
+    "postcss": "^8.4.47",
     "react": "^19.0.0",
     "react-bootstrap": "^2.10.9",
     "react-datepicker": "^8.3.0",
@@ -21,6 +23,7 @@
     "react-helmet": "^6.1.0",
     "react-leaflet": "^5.0.0",
     "react-router-dom": "^7.5.0",
+    "tailwindcss": "^3.4.13",
     "vite-booking-sport-filds": "file:"
   },
   "devDependencies": {
@@ -35,7 +38,7 @@
     "eslint-plugin-react-refresh": "^0.4.19",
     "globals": "^15.15.0",
     "postcss": "^8.5.3",
-    "tailwindcss": "^4.1.7",
+    "tailwindcss": "^4.1.8",
     "vite": "^6.2.0"
   }
 }

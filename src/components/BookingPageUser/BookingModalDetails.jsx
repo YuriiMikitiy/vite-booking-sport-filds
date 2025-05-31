@@ -37,7 +37,10 @@ export default function BookingModalconfirmation({ court, bookingInfo, onClose }
         <p><strong>Вид спорту:</strong> {getCorrectType(court.type).name}</p>
         <p><strong>Час:</strong> {formatTime(startTime)} - {formatTime(endTime)}</p>
         <p><strong>Вартість:</strong> {bookingInfo.totalPrice} грн</p>
+        <p><strong>Коментар:</strong> {bookingInfo.comment ? bookingInfo.comment : "Коментаря немає"}</p>
         <p className="notice">Клуб може змінити вартість послуги</p>
+
+        
 
         <div className="modal-buttons">
           <button className="confirm-button" onClick={onClose}>Закрити</button>

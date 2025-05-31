@@ -35,6 +35,8 @@
   max-width: 400px;
   width: 100%;
   position: relative;
+  max-height: 95vh; /* Limit height to 95% of viewport height */
+  overflow-y: auto; /* Enable vertical scrolling */
 }
 
 .modal-content input, textarea {
@@ -70,4 +72,16 @@
   padding: 10px 16px;
   border-radius: 8px;
   cursor: pointer;
+  width: 140px;
+  margin-left: 24px;
+}
+.cancel-button-my-book {
+  background: #ef4444;
+  color: white;
+  border: none;
+  padding: 10px 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  width: 208px;
+  margin-left: 24px;
 }

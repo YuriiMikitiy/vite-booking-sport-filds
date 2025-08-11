@@ -9,6 +9,9 @@
   justify-content: center;
   align-items: center;
   z-index: 1000;
+   overflow-y: auto; /* Дозволяє вертикальну прокрутку */
+  padding: 20px; /* Щоб вміст не прилипав до країв при скролі */
+  padding-top: 100px;
 }
 
 /* Для модального вікна ведення дати часу */
@@ -29,16 +32,18 @@
 
 
 .modal-content {
-  background: white;
-  padding: 30px;
-  border-radius: 12px;
-  max-width: 400px;
+  background: linear-gradient(135deg, #0da26b 0%, #111827 100%);
+  padding: 2rem;
+  border-radius: 1rem;
   width: 100%;
+  max-width: 500px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
   position: relative;
-  max-height: 95vh; /* Limit height to 95% of viewport height */
-  overflow-y: auto; /* Enable vertical scrolling */
+  transform: translateY(-20px);
+  animation: slideUp 0.3s ease-in-out forwards;
+  font-family: 'Inter', sans-serif;
+  color: #f3f4f6;
 }
-
 .modal-content input, textarea {
   display: block;
   width: 100%;

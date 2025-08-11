@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useCallback, useRef } from "react";
 import "./BookingPageUser.css";
-import { getBookingsByUserId, deleteBookingsByBookingId } from "../../../services/sportFild";
+import { getBookingsByUserId, cancelBookingsByBookingId } from "../../../services/sportFild";
 import { sports } from "../HomaPage/InputSection/dateTime";
 import BookingsList from "./BookingsList.jsx";
 
@@ -69,7 +69,7 @@ export default function BookingPageUser() {
 
     try {
       setDeletingId(bookingId);
-      await deleteBookingsByBookingId(bookingId);
+      await cancelBookingsByBookingId(bookingId);
       await fetchUserBookings();
     } catch (error) {
       console.error("Помилка при видаленні бронювання:", error);

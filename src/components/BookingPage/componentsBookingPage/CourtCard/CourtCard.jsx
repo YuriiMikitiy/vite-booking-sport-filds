@@ -1,7 +1,7 @@
 import React from 'react';
 import { getCorrectType } from '../../BookingPage'; // Assuming getCorrectType is exported from BookingPage
 
-const CourtCard = ({ courts, selectedSport, setSelectedCourt, setSelectedSportType, handleShowOnMap }) => {
+const CourtCard = ({ courts, setSelectedCourt, handleShowOnMap }) => {
   return (
     <div style={{ marginBottom: '50px' }}>
       {courts.map((court) => (
@@ -19,16 +19,20 @@ const CourtCard = ({ courts, selectedSport, setSelectedCourt, setSelectedSportTy
           </div>
           <div className="card-info">
             <h3>{court.title}</h3>
-            <p>{court.location.address}</p>
+            <p>{court.location?.address ?? "Немає"}</p>
+
+            {/* Відображення всіх видів спорту */}
             <div className="tags">
-              <span className="tag">
-                <img
-                  src={getCorrectType(court.type)?.icon || '/src/assets/images/default-sport.png'}
-                  alt={selectedSport.name}
-                  width="20"
-                />{' '}
-                {getCorrectType(court.type)?.name || 'Спорт'}
-              </span>
+              {court.types?.map((sportType, index) => (
+                <span className="tag" key={index}>
+                  <img
+                    src={getCorrectType(sportType.type)?.icon || '/src/assets/images/default-sport.png'}
+                    alt={getCorrectType(sportType.type)?.name || 'Спорт'}
+                    width="20"
+                  />{' '}
+                  {getCorrectType(sportType.type)?.name || 'Спорт'}
+                </span>
+              ))}
             </div>
             {court.warningInformation && (
               <p className="warning">⚠️{court.warningInformation}</p>
@@ -47,7 +51,7 @@ const CourtCard = ({ courts, selectedSport, setSelectedCourt, setSelectedSportTy
                 className="book-button highlight"
                 onClick={() => {
                   setSelectedCourt(court);
-                  setSelectedSportType(selectedSport.name);
+                  //setSelectedSportType(selectedSport.name);
                 }}
               >
                 ⚡ Забронювати майданчик у кілька кліків тут →{' '}

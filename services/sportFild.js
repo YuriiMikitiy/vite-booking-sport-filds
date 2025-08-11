@@ -65,15 +65,33 @@ export const getBookingsByUserId = async (userId) => {
 //   }
 // };
 
-export const deleteBookingsByBookingId = async (bookingId) => {
-  try {
-    const response = await axios.delete(`${API_BASE_URL_BOOKING}/DeleteBookingByIdBooking`, {
-      params: { bookingId }
-    });
+
+
+// export const deleteBookingsByBookingId = async (bookingId) => {
+//   try {
+//     const response = await axios.delete(`${API_BASE_URL_BOOKING}/DeleteBookingByIdBooking`, {
+//       params: { bookingId }
+//     });
     
+//     return response.data;
+//   } catch (error) {
+//     console.error('Помилка при видаленні бронювання:', error);
+//     throw error;
+//   }
+// };
+export const cancelBookingsByBookingId = async (bookingId) => {
+  try {
+    const response = await axios.post(
+      `${API_BASE_URL_BOOKING}/cancel-booking`,
+      null, // тіло порожнє
+      {
+        params: { bookingId },
+      }
+    );
     return response.data;
   } catch (error) {
-    console.error('Помилка при видаленні бронювання:', error);
+    console.error("Помилка при скасуванні бронювання:", error);
     throw error;
   }
 };
+

@@ -80,7 +80,7 @@ export default function MapView({
           <Popup>Ваше поточне місцезнаходження</Popup>
         </Marker>
       )}
-      {sportFild.map((court) => (
+      {/* {sportFild.map((court) => (
         <Marker
           position={[court.location.latitude, court.location.longitude]}
           key={court.id}
@@ -91,7 +91,22 @@ export default function MapView({
             {court.location.address}
           </Popup>
         </Marker>
-      ))}
+      ))} */}
+      {sportFild
+  .filter((court) => court.location && court.location.latitude && court.location.longitude)
+  .map((court) => (
+    <Marker
+      position={[court.location.latitude, court.location.longitude]}
+      key={court.id}
+    >
+      <Popup>
+        <b>{court.title}</b>
+        <br />
+        {court.location.address ?? "Адреса відсутня"}
+      </Popup>
+    </Marker>
+  ))}
+
     </MapContainer>
   );
 }

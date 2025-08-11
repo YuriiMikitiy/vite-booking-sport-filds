@@ -8,6 +8,19 @@ export default function BookingCard({
   handleShowOnMap,
   setSelectedBooking,
 }) {
+
+const correctStatus = (type) => {
+  switch (type) {
+    case 1:
+      return "Очікує підтвердження";
+    case 2:
+      return "Підтверджено";
+    case 3:
+      return "Скасовано";
+    default:
+      break;
+  }
+}
   return (
     <div className="card-user">
       <div className="card-image-container">
@@ -20,7 +33,7 @@ export default function BookingCard({
         />
         <div className="image-badges">
           <span className="badge">
-            Статус: {booking.status === 2 ? "Підтверджено" : "Очікує підтвердження"}
+            Статус: {correctStatus(booking.status) }
           </span>
         </div>
       </div>

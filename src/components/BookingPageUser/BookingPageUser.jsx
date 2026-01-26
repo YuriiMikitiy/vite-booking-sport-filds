@@ -24,23 +24,30 @@ export default function BookingPageUser() {
   const userId = localStorage.getItem("userId");
 
   const fetchUserBookings = useCallback(async () => {
-    try {
-      setLoading(true);
-      const data = await getBookingsByUserId(userId);
-      setBookings(data);
-      if (data.length > 0 && !userLocation) {
-        setMapCenter([
-          data[0].sportsField.location.latitude,
-          data[0].sportsField.location.longitude,
-        ]);
-      }
-    } catch (error) {
-      console.error("Помилка при завантаженні бронювань:", error);
-      setBookings([]);
-    } finally {
-      setLoading(false);
+  try {
+    setLoading(true);
+    const data = await getBookingsByUserId(userId);
+
+    const sortedBookings = [...data].sort(
+      (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
+    );
+
+    setBookings(sortedBookings);
+
+    if (sortedBookings.length > 0 && !userLocation) {
+      setMapCenter([
+        sortedBookings[0].sportsField.location.latitude,
+        sortedBookings[0].sportsField.location.longitude,
+      ]);
     }
-  }, [userId, userLocation]);
+  } catch (error) {
+    console.error("Помилка при завантаженні бронювань:", error);
+    setBookings([]);
+  } finally {
+    setLoading(false);
+  }
+}, [userId, userLocation]);
+
 
   useEffect(() => {
     if (navigator.geolocation) {

@@ -17,14 +17,12 @@ export default function BookingModalChooseServices({ court, onClose, onConfirm }
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
-  console.log("Received court:", court);
+
 
   // Підрізати час до "HH:MM"
    function normalizeTime(timeStr) {
-    console.log("normalizeTime input:", timeStr);
     if (!timeStr) return "";
     const normalized = timeStr.substring(0, 5); // Відрізати секунди
-    console.log("normalizeTime output:", normalized);
     return normalized;
   }
 
@@ -100,56 +98,7 @@ export default function BookingModalChooseServices({ court, onClose, onConfirm }
     fetchAvailableSlots();
   }, [date, court.id]);
 
-  // const handleSubmit = async (e) => {
-  //   e.preventDefault();
-  //   setError("");
-
-  //   if (!date || !time || !duration || !selectedSportType) {
-  //     setError("Будь ласка, заповніть всі поля");
-  //     return;
-  //   }
-
-  //   try {
-  //     const startTime = new Date(`${date}T${time}:00Z`);
-  //     if (isNaN(startTime.getTime())) {
-  //       setError("Некоректна дата або час");
-  //       return;
-  //     }
-
-  //     const endTimeDate = new Date(startTime.getTime() + duration * 60 * 60 * 1000);
-
-  //     const response = await axios.post(
-  //       "https://localhost:44313/api/Booking/check-availability",
-  //       {
-  //         sportsFieldId: court.id,
-  //         startTime: startTime.toISOString(),
-  //         durationMinutes: duration * 60,
-  //       }
-  //     );
-
-  //     if (response.data) {
-  //       const totalPrice = duration * selectedSportType.pricePerHour;
-  //       onConfirm({
-  //         court: court.title,
-  //         location: court.location.address,
-  //         sportType: getCorrectType(selectedSportType.type)?.name,
-  //         date,
-  //         time,
-  //         duration,
-  //         totalPrice,
-  //         endTime: endTimeDate.toLocaleTimeString([], {
-  //           hour: "2-digit",
-  //           minute: "2-digit",
-  //           timeZone: "UTC",
-  //         }),
-  //       });
-  //     } else {
-  //       setError("Обраний час уже зайнятий. Спробуйте інший.");
-  //     }
-  //   } catch (err) {
-  //     setError(err.response?.data?.message || "Помилка бронювання");
-  //   }
-  // };
+ 
   const handleSubmit = async (e) => {
   e.preventDefault();
   setError("");
@@ -208,7 +157,8 @@ export default function BookingModalChooseServices({ court, onClose, onConfirm }
       onConfirm({
         court: court.title,
         location: court.location.address,
-        sportType: getCorrectType(selectedSportType.type)?.name,
+        // sportType: getCorrectType(selectedSportType.type)?.name,
+        sportType: selectedSportType.type,
         date,
         time,
         duration,
@@ -245,22 +195,17 @@ export default function BookingModalChooseServices({ court, onClose, onConfirm }
 
   // День тижня вибраної дати
   const dayOfWeek = date ? new Date(date).getDay() : null;
-  console.log("Selected date:", date);
-  console.log("Day of week:", dayOfWeek);
-  console.log("Selected sport type:", selectedSportType);
 
    // Розклад на цей день для вибраного виду спорту
   const scheduleForDay = selectedSportType?.weeklySchedules?.find(
     (ws) => ws.dayOfWeek === dayOfWeek
   );
-  console.log("Schedule for day:", scheduleForDay);
 
   // Генеруємо доступні часові інтервали згідно розкладу
   const availableTimes = generateTimeOptions(
     scheduleForDay?.availableFrom,
     scheduleForDay?.availableTo
   );
-  console.log("Available times:", availableTimes);
 
   // Кінцевий час бронювання
   const startTime = time ? new Date(`${date}T${time}:00Z`) : null;

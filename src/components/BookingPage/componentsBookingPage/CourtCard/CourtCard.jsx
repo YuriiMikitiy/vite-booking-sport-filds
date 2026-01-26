@@ -1,15 +1,21 @@
-import React from 'react';
-import { getCorrectType } from '../../BookingPage'; // Assuming getCorrectType is exported from BookingPage
+import React from "react";
+import { getCorrectType } from "../../BookingPage"; // Assuming getCorrectType is exported from BookingPage
 
 const CourtCard = ({ courts, setSelectedCourt, handleShowOnMap }) => {
   return (
-    <div style={{ marginBottom: '50px' }}>
+    <div style={{ marginBottom: "50px" }}>
       {courts.map((court) => (
         <div className="card" key={court.id}>
           <div className="card-image-container">
             <img
-              src={court.imageUrl || '/src/assets/images/default-court.jpg'}
-              alt={court.title}
+              src={
+                court.imageUrl ||
+                "/src/assets/images/default-image-for-sport-field.jpg"
+              }
+              onError={(e) =>
+                (e.target.src =
+                  "/src/assets/images/default-image-for-sport-field.png")
+              }
               className="card-image"
             />
             <div className="image-badges">
@@ -26,11 +32,14 @@ const CourtCard = ({ courts, setSelectedCourt, handleShowOnMap }) => {
               {court.types?.map((sportType, index) => (
                 <span className="tag" key={index}>
                   <img
-                    src={getCorrectType(sportType.type)?.icon || '/src/assets/images/default-sport.png'}
-                    alt={getCorrectType(sportType.type)?.name || 'Спорт'}
+                    src={
+                      getCorrectType(sportType.type)?.icon ||
+                      "/src/assets/images/default-sport.png"
+                    }
+                    alt={getCorrectType(sportType.type)?.name || "Спорт"}
                     width="20"
-                  />{' '}
-                  {getCorrectType(sportType.type)?.name || 'Спорт'}
+                  />{" "}
+                  {getCorrectType(sportType.type)?.name || "Спорт"}
                 </span>
               ))}
             </div>
@@ -42,9 +51,9 @@ const CourtCard = ({ courts, setSelectedCourt, handleShowOnMap }) => {
             </p>
             <div
               style={{
-                display: 'flex',
-                justifyContent: 'space-between',
-                alignItems: 'center',
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
               }}
             >
               <button
@@ -54,13 +63,13 @@ const CourtCard = ({ courts, setSelectedCourt, handleShowOnMap }) => {
                   //setSelectedSportType(selectedSport.name);
                 }}
               >
-                ⚡ Забронювати майданчик у кілька кліків тут →{' '}
+                ⚡ Забронювати майданчик у кілька кліків тут →{" "}
                 <div
                   style={{
-                    backgroundColor: 'Blue',
-                    padding: '8px',
-                    borderRadius: '15px',
-                    margin: '0px',
+                    backgroundColor: "Blue",
+                    padding: "8px",
+                    borderRadius: "15px",
+                    margin: "0px",
                   }}
                 >
                   Забронювати
@@ -68,7 +77,12 @@ const CourtCard = ({ courts, setSelectedCourt, handleShowOnMap }) => {
               </button>
               <button
                 className="show-on-map-button"
-                onClick={() => handleShowOnMap([court.location.latitude, court.location.longitude])}
+                onClick={() =>
+                  handleShowOnMap([
+                    court.location.latitude,
+                    court.location.longitude,
+                  ])
+                }
               >
                 Показати на карті
               </button>
@@ -81,74 +95,3 @@ const CourtCard = ({ courts, setSelectedCourt, handleShowOnMap }) => {
 };
 
 export default CourtCard;
-
-
-// import React from 'react';
-// import { getCorrectType } from '../../../utils/sportUtils';
-// import './CourtCard.css';
-
-// const CourtCard = ({ court, onBook, onShowOnMap }) => {
-//   const sportType = getCorrectType(court.type);
-  
-//   return (
-//     <div className="court-card">
-//       <div className="card-image-container">
-//         <img
-//           src={court.imageUrl || "/src/assets/images/default-court.jpg"}
-//           alt={court.title}
-//           className="card-image"
-//           loading="lazy"
-//         />
-//         <div className="image-badges">
-//           <span className="badge red">❤️ Без комісії</span>
-//           <span className="badge yellow">⚡ Онлайн</span>
-//         </div>
-//       </div>
-      
-//       <div className="card-info">
-//         <h3>{court.title}</h3>
-//         <p className="card-address">{court.location.address}</p>
-        
-//         <div className="tags">
-//           <span className="tag">
-//             <img 
-//               src={sportType?.icon} 
-//               alt={sportType?.name} 
-//               width="20" 
-//               height="20"
-//             />
-//             {sportType?.name || "Спорт"}
-//           </span>
-//         </div>
-        
-//         {court.warningInformation && (
-//           <p className="warning">⚠️ {court.warningInformation}</p>
-//         )}
-        
-//         <p className="description">
-//           У цьому клубі можна забронювати корт менше ніж за 1 хвилину
-//         </p>
-        
-//         <div className="card-actions">
-//           <button 
-//             className="book-button highlight"
-//             onClick={() => onBook(court)}
-//             aria-label={`Забронювати ${court.title}`}
-//           >
-//             ⚡ Забронювати майданчик у кілька кліків тут →
-//             <span className="book-now">Забронювати</span>
-//           </button>
-          
-//           <button 
-//             className="show-on-map-button"
-//             onClick={() => onShowOnMap([court.location.latitude, court.location.longitude])}
-//           >
-//             Показати на карті
-//           </button>
-//         </div>
-//       </div>
-//     </div>
-//   );
-// };
-
-// export default React.memo(CourtCard);

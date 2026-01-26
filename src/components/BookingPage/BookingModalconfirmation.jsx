@@ -19,6 +19,8 @@ export default function BookingModalconfirmation({ court, bookingInfo, onClose }
   const [bookedSlots, setBookedSlots] = useState([]);
   const [isTimeValid, setIsTimeValid] = useState(true);
 
+  
+
   // Check if user is logged in
   useEffect(() => {
     const loggedIn = localStorage.getItem('isLoggedIn') === 'true';
@@ -32,7 +34,7 @@ export default function BookingModalconfirmation({ court, bookingInfo, onClose }
     async function fetchBookedSlots() {
       try {
         const response = await axios.get(
-          `https://localhost:44313/api/Booking/bookings/${court.id}/${bookingInfo.date}`,
+          `https://localhost:44313/api/Booking/available-slots/${court.id}/${bookingInfo.date}`,
           {
             headers: {
               "Accept": "application/json"
@@ -130,11 +132,13 @@ export default function BookingModalconfirmation({ court, bookingInfo, onClose }
         throw new Error("Обраний час недоступний");
       }
 
+
       // Create booking object based on login status
       const bookingData = isLoggedIn
         ? {
             sportFieldId: court.id,
             comment: comment || null,
+            sportType: Number(bookingInfo.sportType),
             startTime: startTime.toISOString(),
             durationMinutes: bookingInfo.duration * 60,
             totalPrice: bookingInfo.totalPrice,
@@ -143,21 +147,13 @@ export default function BookingModalconfirmation({ court, bookingInfo, onClose }
         : {
             sportFieldId: court.id,
             comment: comment || null,
+            sportType: Number(bookingInfo.sportType),
             startTime: startTime.toISOString(),
             durationMinutes: bookingInfo.duration * 60,
             totalPrice: bookingInfo.totalPrice,
             fullName: name.trim(),
             phoneNumber: phone
           };
-
-
-          console.log("Sending to API:", {
-  sportsFieldId: court.id,
-  startTime: startTime.toISOString(),
-  durationMinutes: bookingInfo.duration * 60,
-  totalPrice: bookingInfo.totalPrice
-
-});
 
       const endpoint = isLoggedIn
         ? "https://localhost:44313/api/Booking/bookings"
@@ -195,7 +191,7 @@ export default function BookingModalconfirmation({ court, bookingInfo, onClose }
         <h2>Підтвердження бронювання</h2>
         <h3>{bookingInfo.court || bookingInfo.title}</h3>
         <p>Локація: {bookingInfo.location?.address || bookingInfo.location}</p>
-        <p>Вид спорту: {getCorrectType(court.type).name}</p>
+        <p>Вид спорту: {getCorrectType(bookingInfo.sportType)?.name || "Не обрано"}</p>
         <p>Дата: {bookingInfo.date}</p>
         <p>Час: {bookingInfo.time} - {bookingInfo.endTime}</p>
         <p>Тривалість: {bookingInfo.duration} год</p>

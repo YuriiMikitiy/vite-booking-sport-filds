@@ -31,27 +31,21 @@ export default function BookingModalconfirmation({ court, bookingInfo, onClose }
 
   // Fetch booked time slots for the selected court and date
   useEffect(() => {
-    async function fetchBookedSlots() {
-      try {
-        const response = await axios.get(
-          `https://localhost:44313/api/Booking/available-slots/${court.id}/${bookingInfo.date}`,
-          {
-            headers: {
-              "Accept": "application/json"
-            }
-          }
-        );
-        setBookedSlots(response.data || []);
-      } catch (err) {
-        console.error("Error fetching booked slots:", err);
-        setError("Не вдалося завантажити інформацію про бронювання");
-      }
+  async function fetchBookedSlots() {
+    try {
+      const response = await axios.get(
+        `https://localhost:44313/api/Booking/available-slots/${court.id}/${bookingInfo.date}/${bookingInfo.sportType}`  // <-- ДОДАЛИ /${bookingInfo.sportType}
+      );
+      setBookedSlots(response.data || []);
+    } catch (err) {
+      console.error("Error fetching booked slots:", err);
+      setError("Не вдалося завантажити інформацію про бронювання");
     }
-
-    if (court.id && bookingInfo.date) {
-      fetchBookedSlots();
-    }
-  }, [court.id, bookingInfo.date]);
+  }
+  if (court.id && bookingInfo.date && bookingInfo.sportType !== undefined) {
+    fetchBookedSlots();
+  }
+}, [court.id, bookingInfo.date, bookingInfo.sportType]);
 
   // Handle click outside to close modal
   useEffect(() => {

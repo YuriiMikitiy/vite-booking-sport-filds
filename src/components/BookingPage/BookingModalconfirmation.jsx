@@ -129,25 +129,27 @@ export default function BookingModalconfirmation({ court, bookingInfo, onClose }
 
       // Create booking object based on login status
       const bookingData = isLoggedIn
-        ? {
-            sportFieldId: court.id,
-            comment: comment || null,
-            sportType: Number(bookingInfo.sportType),
-            startTime: startTime.toISOString(),
-            durationMinutes: bookingInfo.duration * 60,
-            totalPrice: bookingInfo.totalPrice,
-            userId: userId
-          }
-        : {
-            sportFieldId: court.id,
-            comment: comment || null,
-            sportType: Number(bookingInfo.sportType),
-            startTime: startTime.toISOString(),
-            durationMinutes: bookingInfo.duration * 60,
-            totalPrice: bookingInfo.totalPrice,
-            fullName: name.trim(),
-            phoneNumber: phone
-          };
+  ? {
+      sportFieldId: court.id,
+      comment: comment || null,
+      sportType: Number(bookingInfo.sportType),
+      startTime: startTime.toISOString(),
+      durationMinutes: bookingInfo.duration * 60,
+      totalPrice: bookingInfo.totalPrice,
+      userId: userId,
+      sportsFieldInstanceId: bookingInfo.instanceId   // ← ДОДАЙ ЦЕ!
+    }
+  : {
+      sportFieldId: court.id,
+      comment: comment || null,
+      sportType: Number(bookingInfo.sportType),
+      startTime: startTime.toISOString(),
+      durationMinutes: bookingInfo.duration * 60,
+      totalPrice: bookingInfo.totalPrice,
+      fullName: name.trim(),
+      phoneNumber: phone,
+      sportsFieldInstanceId: bookingInfo.instanceId   // ← і тут теж!
+    };
 
       const endpoint = isLoggedIn
         ? "https://localhost:44313/api/Booking/bookings"

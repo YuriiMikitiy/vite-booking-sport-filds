@@ -111,6 +111,7 @@ export default function SearchFilters({ selectedSport, setSelectedSport, setSear
           onSelect={handleTimeSelect}
         />
         <CustomDropdown
+          style={{ display: "none" }}
           options={durationOptions}
           placeholder="Оберіть тривалість"
           onSelect={handleDurationSelect}

@@ -4,129 +4,177 @@ import axios from "axios";
 import { sports } from "../HomaPage/InputSection/dateTime";
 
 function getCorrectType(type) {
-  return sports[type] ?? { name: "Unknown", icon: "" };
+  return sports[type] ?? { name: "Невідомий вид", icon: "" };
 }
 
 export default function BookingModalChooseServices({ court, onClose, onConfirm }) {
   const modalRef = useRef();
+
   const [date, setDate] = useState("");
   const [selectedSportType, setSelectedSportType] = useState(null);
+  const [selectedInstance, setSelectedInstance] = useState(null);
   const [selectedBlock, setSelectedBlock] = useState(null);
   const [availableSlots, setAvailableSlots] = useState([]);
-  const [loading, setLoading] = useState(false);
+  const [instances, setInstances] = useState([]);
+  const [slotsLoading, setSlotsLoading] = useState(false);
   const [error, setError] = useState("");
 
+  // Логування даних майданчика при завантаженні
+  useEffect(() => {
+    console.log("[DEBUG] Дані майданчика (court):", court);
+    console.log("[DEBUG] Типи спорту в court.types:", court?.types);
+  }, [court]);
+
+  // Завантаження інстансів — БЕЗ запиту на бекенд, беремо з court.types
+  useEffect(() => {
+    if (selectedSportType?.type !== undefined) {
+      const foundType = court?.types?.find(t => t.type === selectedSportType.type);
+      console.log("[DEBUG] Обраний тип спорту з court.types:", foundType);
+
+      const loadedInstances = foundType?.instances || [];
+      setInstances(loadedInstances);
+
+      if (loadedInstances.length === 1) {
+        console.log("[DEBUG] Автоматичний вибір єдиного інстансу");
+        setSelectedInstance(loadedInstances[0]);
+      } else {
+        console.log(`[DEBUG] Знайдено ${loadedInstances.length} інстансів`);
+        setSelectedInstance(null);
+      }
+    } else {
+      setInstances([]);
+      setSelectedInstance(null);
+    }
+  }, [selectedSportType, court]);
+
+  // Завантаження слотів
   const fetchAvailableSlots = async () => {
-    if (!date || selectedSportType?.type === undefined) {
-      setAvailableSlots([]);
-      return;
+  if (!date || selectedSportType?.type === undefined) {
+    console.log("[DEBUG] Не вистачає дати або типу → скидаємо слоти");
+    setAvailableSlots([]);
+    return;
+  }
+
+  console.log(`[DEBUG] Завантажуємо слоти: дата=${date}, тип=${selectedSportType.type}, інстанс=${selectedInstance?.id || "немає"}`);
+
+  setSlotsLoading(true);
+  setError("");
+
+  let url = `https://localhost:44313/api/Booking/available-slots/${court.id}/${date}/${selectedSportType.type}`;
+  if (selectedInstance?.id) {
+    url += `/${selectedInstance.id}`;
+  }
+
+  try {
+    const response = await axios.get(url);
+    console.log("[DEBUG] Слоти з сервера:", response.data);
+
+    const now = new Date();
+    const future = response.data.filter(slot => new Date(slot.startTime) > now);
+    setAvailableSlots(future);
+    console.log(`[DEBUG] Залишилося майбутніх слотів: ${future.length}`);
+  } catch (err) {
+    console.error("[ERROR] Помилка слотів:", err.response?.data || err.message);
+    if (err.response?.status === 404) {
+      setError("Немає вільних слотів для цього типу/місця");
+    } else {
+      setError("Не вдалося завантажити вільні години");
     }
-    setLoading(true);
-    setError("");
-    const url = `https://localhost:44313/api/Booking/available-slots/${court.id}/${date}/${selectedSportType.type}`;
-    
-    try {
-      const response = await axios.get(url);
-      const now = new Date();
-      // Фільтруємо тільки майбутні слоти
-      const future = response.data.filter(slot => new Date(slot.startTime) > now);
-      setAvailableSlots(future);
-      console.log("[FETCH] Отримано слотів:", future.length);
-    } catch (err) {
-      console.error("[FETCH] Помилка:", err);
-      setError("Не вдалося завантажити доступні години");
-    } finally {
-      setLoading(false);
-    }
-  };
+  } finally {
+    setSlotsLoading(false);
+  }
+};
 
   useEffect(() => {
     fetchAvailableSlots();
-  }, [date, selectedSportType?.type, court?.id]);
+  }, [date, selectedSportType?.type, selectedInstance?.id]);
 
-  // ГЕНЕРАЦІЯ БЛОКІВ (Виправлено)
   const availableBlocks = React.useMemo(() => {
-    if (!availableSlots.length) return [];
-    
-    const blocks = [];
-    // Сортуємо за часом
-    const sorted = [...availableSlots].sort((a, b) => new Date(a.startTime) - new Date(b.startTime));
+  if (!availableSlots.length) return [];
 
-    for (let i = 0; i < sorted.length - 1; i++) {
-      const first = sorted[i];
-      const second = sorted[i + 1];
+  const blocks = [];
+  const sorted = [...availableSlots].sort((a, b) => new Date(a.startTime) - new Date(b.startTime));
 
-      const d1 = new Date(first.startTime);
-      const d2 = new Date(second.startTime);
+  for (let i = 0; i < sorted.length; i++) {
+    const slot = sorted[i];
+    const start = new Date(slot.startTime);
+    const end = new Date(slot.endTime);
 
-      // Різниця в часі між початком першого і другого слоту має бути рівно 30 хв (1800000 мс)
-      const diffMs = d2.getTime() - d1.getTime();
-      
-      // Дозволяємо похибку в 10 секунд (якщо сервер повертає 09:30:01)
-      if (diffMs >= 1740000 && diffMs <= 1860000) {
-        const blockStart = d1.toLocaleTimeString("uk-UA", { hour: "2-digit", minute: "2-digit" });
-        
-        // Кінець блоку — це початок другого слоту + 30 хв
-        const endFull = new Date(d2.getTime() + 30 * 60000);
-        const blockEnd = endFull.toLocaleTimeString("uk-UA", { hour: "2-digit", minute: "2-digit" });
+    // Перевіряємо, чи це повна година
+    if (end.getTime() - start.getTime() === 60 * 60 * 1000) {
+      const startStr = start.toLocaleTimeString("uk-UA", { hour: "2-digit", minute: "2-digit" });
+      const endStr = end.toLocaleTimeString("uk-UA", { hour: "2-digit", minute: "2-digit" });
 
-        blocks.push({
-          start: blockStart,
-          end: blockEnd,
-          startFull: first.startTime, // Зберігаємо ISO строку для відправки на бекенд
-          label: `${blockStart} — ${blockEnd}`,
-        });
-        
-        // Якщо хочеш, щоб слоти не перетиналися (напр. тільки 9:00-10:00 і 10:00-11:00), 
-        // залиш i++. Якщо хочеш "ковзаюче" вікно (9:00-10:00, 9:30-10:30) — видали i++.
-        i++; 
-      }
+      blocks.push({
+        start: startStr,
+        end: endStr,
+        startFull: slot.startTime,
+        label: `${startStr} — ${endStr}`,
+      });
     }
-    return blocks;
-  }, [availableSlots]);
+  }
+
+  console.log("[DEBUG] Згенеровано годинних блоків:", blocks.length);
+  return blocks;
+}, [availableSlots]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
 
-    if (!date || !selectedSportType || !selectedBlock) {
-      setError("Оберіть дату, вид спорту та блок часу");
-      return;
+    if (!date) return setError("Оберіть дату");
+    if (!selectedSportType) return setError("Оберіть вид спорту");
+    if (!selectedBlock) return setError("Оберіть час");
+
+    const requiresInstance = instances.length > 1;
+    if (requiresInstance && !selectedInstance) {
+      return setError("Оберіть номер місця/корту");
     }
 
+    console.log("[DEBUG] Відправляємо бронювання:", {
+      sportsFieldId: court.id,
+      sportsFieldInstanceId: selectedInstance?.id || null,
+      startTime: selectedBlock.startFull,
+      durationMinutes: 60,
+      sportType: selectedSportType.type,
+    });
+
     try {
-      // Використовуємо саме ту ISO строку, яку дав бекенд (selectedBlock.startFull)
       const requestData = {
-        sportsFieldId: court.id,
-        startTime: selectedBlock.startFull,
-        durationMinutes: 60,
-        sportType: selectedSportType.type,
-      };
+  sportsFieldId: court.id,
+  startTime: selectedBlock.startFull,
+  durationMinutes: 60,
+  sportType: selectedSportType.type,
+  sportsFieldInstanceId: selectedInstance?.id || null  // ← тепер передаємо instanceId
+};
 
-      console.log("[CHECK] Відправка перевірки:", requestData);
-
-      const response = await axios.post(
+      const res = await axios.post(
         "https://localhost:44313/api/Booking/check-availability",
         requestData
       );
 
-      if (response.data === true) {
+      console.log("[DEBUG] Перевірка доступності:", res.data);
+
+      if (res.data === true) {
         onConfirm({
-          court: court.title,
-          location: court.location.address,
+          court: court.title || court.name,
+          location: court.location?.address || "",
           sportType: selectedSportType.type,
+          instance: selectedInstance?.displayName || (instances.length === 0 ? "— (без номерів)" : "Автоматично"),
+          instanceId: selectedInstance?.id || null,  // ← ДОДАЙ ЦЕ ПОЛЕ!
           date,
           time: selectedBlock.start,
           duration: 1,
           totalPrice: selectedSportType.pricePerHour,
           endTime: selectedBlock.end,
         });
+        onClose();
       } else {
-        setError("Цей час уже зайнятий (відповідь сервера: false)");
+        setError("Цей час уже зайнятий");
       }
     } catch (err) {
-      console.error("[CHECK] Помилка запиту:", err);
-      setError(err.response?.data?.message || "Помилка при перевірці доступності");
+      console.error("[ERROR] Помилка бронювання:", err.response?.data || err.message);
+      setError(err.response?.data?.message || "Помилка перевірки доступності");
     }
   };
 
@@ -146,51 +194,102 @@ export default function BookingModalChooseServices({ court, onClose, onConfirm }
   return (
     <div className="modal-overlay">
       <div className="modal-content" ref={modalRef}>
-        <h2>Бронювання: {court.title}</h2>
+        <h2>Бронювання: {court.title || court.name}</h2>
+
         <form onSubmit={handleSubmit}>
+          {/* Вид спорту */}
           <label>Вид спорту</label>
           <select
             className="date-select"
             value={selectedSportType?.type ?? ""}
             onChange={(e) => {
               const val = Number(e.target.value);
-              setSelectedSportType(court.types.find(t => t.type === val));
+              const found = court.types?.find(t => t.type === val);
+              console.log("[DEBUG] Обрано тип спорту:", found);
+              setSelectedSportType(found);
+              setSelectedInstance(null);
+              setSelectedBlock(null);
             }}
             required
           >
             <option value="" disabled>Оберіть вид спорту</option>
             {court.types?.map((t, i) => (
-              <option key={i} value={t.type}>{getCorrectType(t.type).name}</option>
+              <option key={i} value={t.type}>
+                {getCorrectType(t.type).name} ({t.instances?.length || t.quantity || 1} шт)
+              </option>
             ))}
           </select>
 
+          {/* Блок інстансів */}
+          {selectedSportType ? (
+            instances.length > 1 ? (
+              <>
+                <label>Номер корту / столу / місця</label>
+                <select
+                  className="date-select"
+                  value={selectedInstance?.id ?? ""}
+                  onChange={(e) => {
+                    const found = instances.find(inst => inst.id === e.target.value);
+                    console.log("[DEBUG] Обрано інстанс:", found);
+                    setSelectedInstance(found);
+                    setSelectedBlock(null);
+                  }}
+                  required
+                >
+                  <option value="" disabled>Оберіть номер</option>
+                  {instances.map((inst) => (
+                    <option key={inst.id} value={inst.id}>
+                      {inst.displayName || `Місце ${inst.id.slice(0, 8)}`}
+                    </option>
+                  ))}
+                </select>
+              </>
+            ) : instances.length === 1 && selectedInstance ? (
+              <p style={{ margin: "12px 0", color: "#2c7be5", fontWeight: 500 }}>
+                Автоматично обрано: <strong>{selectedInstance.displayName}</strong>
+              </p>
+            ) : (
+              <p style={{ margin: "12px 0", color: "#555", fontStyle: "italic" }}>
+                Місць/номерів не вказано (бронюємо весь майданчик)
+              </p>
+            )
+          ) : null}
+
+          {/* Дата */}
           <label>Дата</label>
-          <select className="date-select" value={date} onChange={(e) => setDate(e.target.value)} required>
+          <select className="date-select" value={date} onChange={(e) => { setDate(e.target.value); setSelectedBlock(null); }} required>
             <option value="" disabled>Оберіть дату</option>
             {getNext7Days().map(d => (
               <option key={d.value} value={d.value}>{d.label}</option>
             ))}
           </select>
 
+          {/* Час */}
           <label>Час (1 година)</label>
           <select
             className="time-input"
             value={selectedBlock?.start || ""}
             onChange={(e) => setSelectedBlock(availableBlocks.find(b => b.start === e.target.value))}
             required
-            disabled={loading || !date || !selectedSportType}
+            disabled={slotsLoading || !date || !selectedSportType}
           >
-            <option value="">{loading ? "Завантаження..." : "Оберіть час"}</option>
+            <option value="">
+              {slotsLoading ? "Завантаження годин..." : "Оберіть час"}
+            </option>
             {availableBlocks.map((b, i) => (
               <option key={i} value={b.start}>{b.label}</option>
             ))}
           </select>
 
-          {error && <p className="error-message" style={{color: 'red'}}>{error}</p>}
-          
+          {error && <p className="error-message" style={{ color: 'red', marginTop: '12px' }}>{error}</p>}
+
           <div className="modal-buttons">
-            <button type="submit" className="submit-button" disabled={loading || !selectedBlock}>
-              Підтвердити
+            <button
+              type="submit"
+              className="submit-button"
+              disabled={slotsLoading || !selectedBlock || (instances.length > 1 && !selectedInstance)}
+            >
+              Підтвердити бронювання
             </button>
             <button type="button" className="cancel-button" onClick={onClose}>Скасувати</button>
           </div>
@@ -199,7 +298,6 @@ export default function BookingModalChooseServices({ court, onClose, onConfirm }
     </div>
   );
 }
-
 
 
 

@@ -1,54 +1,84 @@
-
-
 import React, { useEffect, useRef } from "react";
+import { createPortal } from "react-dom";
 import "./UserProfileModal.css";
 
 export default function UserProfileModal({ user, onClose }) {
   const modalRef = useRef();
 
-  // Закриває модальне вікно при кліку поза його межами
   useEffect(() => {
-    const handleClickOutside = (event) => {
+    const handleMouseDownOutside = (event) => {
       if (modalRef.current && !modalRef.current.contains(event.target)) {
         onClose();
       }
     };
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
+
+    const handleEscClose = (event) => {
+      if (event.key === "Escape") {
+        onClose();
+      }
+    };
+
+    document.addEventListener("mousedown", handleMouseDownOutside);
+    document.addEventListener("keydown", handleEscClose);
+
+    return () => {
+      document.removeEventListener("mousedown", handleMouseDownOutside);
+      document.removeEventListener("keydown", handleEscClose);
+    };
   }, [onClose]);
 
-  return (
+  const modal = (
     <div className="modal-overlay">
       <div className="modal-content" ref={modalRef}>
-        <h2>Інформація про користувача</h2>
-        <ul>
-          {/* <li>
-            <strong>ID:</strong> {user.id}
+        <h2 className="modal-title">Профіль користувача</h2>
+        <ul className="user-info-list">
+          <li className="user-info-item">
+            <span className="info-label">ПІБ:</span>
+            <span className="info-value">{user.fullName}</span>
+            <button
+              className="action-btn"
+              onClick={() => alert("Зміна ПІБ буде додана пізніше")}
+            >
+              Змінити
+            </button>
           </li>
-          <li>
-            <strong>Код користувача:</strong> {user.userCode}
-          </li> */}
-          <li>
-            <strong>ПІБ:</strong> {user.fullName}{" "}
-            <button className="action-btn" onClick={() => alert("Зміна ПІБ буде додана пізніше")}>Змінити</button>
+          <li className="user-info-item">
+            <span className="info-label">Email:</span>
+            <span className="info-value">{user.email}</span>
+            <button
+              className="action-btn"
+              onClick={() => alert("Зміна Email буде додана пізніше")}
+            >
+              Змінити
+            </button>
           </li>
-          <li>
-            <strong>Email:</strong> {user.email}{" "}
-            <button className="action-btn"  onClick={() => alert("Зміна Email буде додана пізніше")}>Змінити</button>
+          <li className="user-info-item">
+            <span className="info-label">Телефон:</span>
+            <span className="info-value">{user.phoneNumber || "Не вказано"}</span>
+            <button
+              className="action-btn"
+              onClick={() => alert("Зміна телефону буде додана пізніше")}
+            >
+              Змінити
+            </button>
           </li>
-          <li>
-            <strong>Телефон:</strong> {user.phoneNumber}{" "}
-            <button className="action-btn"  onClick={() => alert("Зміна телефону буде додана пізніше")}>Змінити</button>
+          <li className="user-info-item">
+            <span className="info-label">Роль:</span>
+            <span className="info-value">
+              {user.role === 1 ? "Користувач" : "Адміністратор Майданчика"}
+            </span>
           </li>
-          <li>
-            <strong>Роль:</strong> {user.role==1 ? "Користувач" : "Адміністратор Майданчика"}
-          </li>
-          <li>
-            <strong>Дата створення:</strong> {new Date(user.createdAt).toLocaleString()}
+          <li className="user-info-item">
+            <span className="info-label">Створено:</span>
+            <span className="info-value">{new Date(user.createdAt).toLocaleString()}</span>
           </li>
         </ul>
-        <button className="close-btn" onClick={onClose}>Закрити</button>
+        <button className="close-btn" onClick={onClose}>
+          Закрити
+        </button>
       </div>
     </div>
   );
+
+  return createPortal(modal, document.body);
 }

@@ -1,40 +1,23 @@
-import React from "react";
-// import CourtCard from "../BookingPage/componentsBookingPage/CourtCard/CourtCard.jsx";
+import React, { useContext } from "react";
+import { LanguageContext } from "../../../assets/LanguageContext.jsx";
 import CourtCard from "../componentsBookingPage/CourtCard/CourtCard.jsx" 
 import { getCorrectVariantWord } from "../BookingPage.jsx";
 
-
-export default function ResultsDisplay({
-  sportFild,
-  selectedSport,
-  noResultsFound,
-  currentPage,
-  itemsPerPage,
-  setSelectedCourt,
-  setSelectedSportType,
-  handleShowOnMap,
-}) {
-  const indexOfLastItem = currentPage * itemsPerPage;
-  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentItems = sportFild.slice(indexOfFirstItem, indexOfLastItem);
+export default function ResultsDisplay({ sportFild, noResultsFound, currentPage, itemsPerPage, setSelectedCourt, handleShowOnMap }) {
+  const { language, translations } = useContext(LanguageContext);
+  const t = translations[language];
 
   return noResultsFound ? (
     <div className="no-results-message">
-      <h3>Нічого не знайдено</h3>
-      <p>Спробуйте змінити параметри пошуку</p>
+      <h3>{t.common.error}</h3>
+      <p>{t.inputSection.searchHint}</p>
     </div>
   ) : (
     <>
       <p className="results-count">
-        Ми знайшли {sportFild.length} {getCorrectVariantWord(sportFild.length)}
+        {t.results.found} {sportFild.length} {getCorrectVariantWord(sportFild.length)}
       </p>
-      <CourtCard
-        courts={currentItems}
-        selectedSport={selectedSport}
-        setSelectedCourt={setSelectedCourt}
-        setSelectedSportType={setSelectedSportType}
-        handleShowOnMap={handleShowOnMap}
-      />
+      <CourtCard courts={sportFild.slice((currentPage-1)*itemsPerPage, currentPage*itemsPerPage)} setSelectedCourt={setSelectedCourt} handleShowOnMap={handleShowOnMap} />
     </>
   );
 }

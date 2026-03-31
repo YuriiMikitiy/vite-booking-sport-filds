@@ -214,12 +214,15 @@ html, body {
 
 .left-section {
   flex: 3;
-  margin-top: 16px;
-  padding: 0 20px;
-  height: calc(100vh - 70px);
+  margin-top: 0;
+  padding: 16px 20px 0;
+  height: 100%;
   overflow-y: auto;
   scrollbar-width: auto;
-  scrollbar-color: #55787e transparent;
+  scrollbar-color: color-mix(in srgb, var(--primary) 35%, var(--border)) transparent;
+  background: color-mix(in srgb, var(--surface) 45%, transparent);
+  border-right: 1px solid var(--border);
+  transition: background-color var(--dur-2) var(--ease-out), border-color var(--dur-2) var(--ease-out);
 }
 
 .left-section::-webkit-scrollbar {
@@ -227,12 +230,12 @@ html, body {
 }
 
 .left-section::-webkit-scrollbar-track {
-  background: #e0e0e0;
+  background: color-mix(in srgb, var(--surface) 55%, transparent);
   border-radius: 4px;
 }
 
 .left-section::-webkit-scrollbar-thumb {
-  background-color: #55787e;
+  background-color: color-mix(in srgb, var(--primary) 35%, var(--surface));
   border-radius: 4px;
 }
 

@@ -5,6 +5,10 @@ import TimeDropdown from "./TimeDropdown.jsx";
 import CustomDropdown from "./CustomDropdown.jsx";
 import { timeOptions, durationOptions, sports } from "./dateTime.js";
 import { useNavigate } from "react-router-dom";
+import { useContext } from "react";
+// Приклад з Header.jsx (якщо Header лежить у src/components/Header/)
+// Якщо файл лежить у src/contexts/LanguageContext.jsx
+import { LanguageContext } from "../../../assets/LanguageContext.jsx";
 
 
 export default function InputSection() {
@@ -16,6 +20,8 @@ export default function InputSection() {
 
   const navigate = useNavigate();
 
+  const { language, setLanguage, translations } = useContext(LanguageContext);
+  const t = translations[language];
   const handleTimeSelect = (value) => {
     console.log("Обраний час:", value);
   };
@@ -94,7 +100,7 @@ export default function InputSection() {
                 className="search-icon"
               />
               <input
-                placeholder="Enter club name or address"
+                placeholder={t.inputSection.searchPlaceholder}
                 className="search-input"
                 type="text"
               />
@@ -123,20 +129,39 @@ export default function InputSection() {
             placeholder="Оберіть тривалість"
             onSelect={handleDurationSelect}
           />
-          <button
-            onClick={() => navigate("/booking")}
-            style={{
-              borderRadius: "15px", 
-              padding: "4px 20px",
-              width: "134px",
-              height: "51px",
-              background: "#7fa200",
-              fontSize:'20px',
-              color: "#000",
-            }}
-          >
-            Пошук
-          </button>
+          <div className="search-wrapper">
+            <button onClick={() => navigate("/booking")} className="search-btn">
+              {t.inputSection.searchBtn}
+            </button>
+
+            <div className="search-hint" role="note" aria-label="Підказка для пошуку">
+              <div className="search-hint-bubble">
+                {t.inputSection.searchHint}
+              </div>
+              <svg
+                className="search-hint-arrow"
+                viewBox="0 0 120 60"
+                preserveAspectRatio="none"
+                aria-hidden="true"
+              >
+                <path
+                  d="M100,40 C78,12 40,44 12,4"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="5"
+                  strokeLinecap="round"
+                />
+                <path
+                  d="M15,5 L44,14 M12,5 L15,25"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="4"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+              </svg>
+            </div>
+</div>
         </div>
       </div>
       <img

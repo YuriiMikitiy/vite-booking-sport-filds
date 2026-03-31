@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 
 const usePagination = (items, itemsPerPage) => {
   const [currentPage, setCurrentPage] = useState(1);
@@ -46,11 +46,22 @@ const usePagination = (items, itemsPerPage) => {
     }
   };
 
+  useEffect(() => {
+    if (totalPages === 0 && currentPage !== 1) {
+      setCurrentPage(1);
+      return;
+    }
+    if (currentPage > totalPages && totalPages > 0) {
+      setCurrentPage(totalPages);
+    }
+  }, [currentPage, totalPages]);
+
   return {
     currentItems,
     pagination: {
       currentPage,
       totalPages,
+      pageSize: itemsPerPage,
       pageNumbers: getPageNumbers(),
       nextPage,
       prevPage,

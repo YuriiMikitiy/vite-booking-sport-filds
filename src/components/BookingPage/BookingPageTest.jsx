@@ -14,7 +14,7 @@ const BookingPageTest = () => {
   const [bookingDetails, setBookingDetails] = useState(null);
   
   const { searchParams, setSearchParams, sportFild, loading, noResultsFound } = useSearch();
-  const { currentItems, pagination } = usePagination(sportFild, 4);
+  const { currentItems, pagination } = usePagination(sportFild, 6);
   const { userLocation, mapCenter, handleShowOnMap } = useGeolocation(sportFild);
 
   const handleBookCourt = (court) => {

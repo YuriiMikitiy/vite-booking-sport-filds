@@ -6,13 +6,14 @@ import LoginPage from "./components/LoginPage";
 import RegisterPage from "./components/RegisterPage";
 import BookingPageUser from "./components/BookingPageUser/BookingPageUser";
 import Footer from "./components/Footer/Footer";
+import "./App.css";
 
 function App() {
   return (
     <Router>
-      <div style={{ margin: 0, padding: 0 }}>
+      <div className="app-shell">
         <Header />
-        <main>
+        <main className="app-main">
           <Routes>
             <Route path="/" element={<HomePage />} />
             <Route path="/booking" element={<BookingPage />} />

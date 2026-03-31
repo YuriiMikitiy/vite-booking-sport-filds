@@ -28,7 +28,7 @@
 }
 
 .select-box {
-    background: var(--surface);
+    background: var(--surface-solid);
     color: var(--text);
     padding: 0 10px;
     border-radius: 12px;
@@ -68,7 +68,7 @@
     display: none;
     position: absolute;
     width: 100%;
-    background: var(--surface);
+    background: var(--surface-solid);
     border-radius: 12px;
     box-shadow: var(--shadow);
     margin-top: 5px;
@@ -122,7 +122,7 @@
 }
 
 .find-box {
-    background: var(--surface);
+    background: var(--surface-solid);
     color: var(--text);
     border-radius: 15px;
     display: flex;
@@ -160,7 +160,7 @@
     width: 150px;
     height: 44px;
     padding: 0 10px;
-    background: var(--surface);
+    background: var(--surface-solid);
     border-radius: 12px;
     border: none;
     font-size: 14px;
@@ -206,20 +206,28 @@
 
 .search-hint {
     position: absolute;
-    top: 90px; /* нижче кнопки */
-    right: -180px; /* зсув вправо */
-    width: 220px;
-    color: white;
-    font-size: 14px;
-    line-height: 1.3;
+    top: calc(100% + 60px);
+    left: 44px;
+    width: 290px;
+    color: var(--text);
+    font-size: 13px;
+    line-height: 1.25;
+    pointer-events: none;
 }
 
-/* Крива стрілка */
-.arrow {
-    display: block;
-    font-size: 30px;
-    transform: rotate(250deg);
-    margin-bottom: -10px;
-    margin-left: 2px;
-    color: #7fa200;
+.search-hint-bubble {
+    background: var(--surface-solid);
+    border: 1px solid var(--border);
+    box-shadow: var(--shadow);
+    padding: 10px 12px;
+    border-radius: 12px;
+}
+
+.search-hint-arrow {
+    position: absolute;
+    top: -50px;
+    left: 0px;
+    width: 140px;
+    height: 70px;
+    color: var(--accent);
 }

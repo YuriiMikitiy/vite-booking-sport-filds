@@ -1,24 +1,28 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import "./Header.css";
 import UserProfileModal from "./UserProfileModal";
 import axios from "axios";
+import { LanguageContext } from "../../assets/LanguageContext";
 
 export default function Header() {
-  // const [language, setLanguage] = useState("uk");
   const [isLoggedIn, setIsLoggedIn] = useState(() => {
-    // Ініціалізуємо стан з localStorage
     return localStorage.getItem('isLoggedIn') === 'true';
   });
 
   const [showModal, setShowModal] = useState(false);
   const [userData, setUserData] = useState(null);
   const navigate = useNavigate();
+  
+  const { language, setLanguage, translations } = useContext(LanguageContext);
+  const t = translations[language];
 
-
-  // const handleLanguageChange = (lang) => {
-  //   setLanguage(lang);
-  // };
+  const [theme, setTheme] = useState(() => {
+    const saved = localStorage.getItem("theme");
+    if (saved === "light" || saved === "dark") return saved;
+    const prefersDark = window.matchMedia?.("(prefers-color-scheme: dark)")?.matches;
+    return prefersDark ? "dark" : "light";
+  });
 
   const handleProfileClick = async () => {
     try {
@@ -31,7 +35,6 @@ export default function Header() {
     }
   };
 
-
   const handleLogout = () => {
     localStorage.removeItem('authToken');
     localStorage.setItem('isLoggedIn', 'false');
@@ -39,11 +42,14 @@ export default function Header() {
     navigate("/");
   };
 
-  // Додамо обробник подій для синхронізації між вкладками
   useEffect(() => {
     const handleStorageChange = (e) => {
       if (e.key === 'isLoggedIn') {
         setIsLoggedIn(e.newValue === 'true');
+      }
+      if (e.key === "theme") {
+        const next = e.newValue === "dark" ? "dark" : "light";
+        setTheme(next);
       }
     };
 
@@ -51,96 +57,90 @@ export default function Header() {
     return () => window.removeEventListener('storage', handleStorageChange);
   }, []);
 
+  useEffect(() => {
+    document.documentElement.dataset.theme = theme;
+    localStorage.setItem("theme", theme);
+  }, [theme]);
+
+  const toggleTheme = () => setTheme((prev) => (prev === "dark" ? "light" : "dark"));
+
   return (
     <div className="header">
       <img
         src="/src/assets/images/BookingSportFildIconApp.png"
         className="header-logo"
-        alt="Головна"
+        alt="Logo"
+        onClick={() => navigate("/")}
+        style={{ cursor: 'pointer' }}
       />
 
       <ul className="nav-list">
-        <li className="header-logo-name">mikitchTask</li>
+        <li className="header-logo-name">{t.header.logoText}</li>
         <li>
-          <a href="/">Головна сторінка</a>
+          <a href="/">{t.header.home}</a>
         </li>
         <li>
-          <a href="/">Контакти</a>
+          <a href="/">{t.header.contacts}</a>
         </li>
-        {/* <li>
-          <select
-            style={{
-              backgroundColor: '#55787e',
-              color: 'black',
-            }}
-            value={language}
-            onChange={(e) => handleLanguageChange(e.target.value)}
-          >
-            <option value="uk">Укр</option>
-            <option value="en">Eng</option>
-            <option value="fr">Fr</option>
-          </select>
-        </li> */}
+
+        {/* Тепер select перенесено в buttonSection нижче */}
+
         <div className="buttonSection">
+          {/* Вибір мови тепер тут, поруч із кнопкою теми */}
+          <select
+            className="language-select"
+            value={language}
+            onChange={(e) => setLanguage(e.target.value)}
+          >
+            <option value="uk">🇺🇦 Укр</option>
+            <option value="en">🇺🇸 Eng</option>
+            <option value="pl">🇵🇱 Pl</option>
+          </select>
+
+          <button
+            type="button"
+            className="theme-toggle"
+            onClick={toggleTheme}
+            aria-label={theme === "dark" ? t.theme.switchToLight : t.theme.switchToDark}
+            title={theme === "dark" ? t.theme.switchToLight : t.theme.switchToDark}
+          >
+            {theme === "dark" ? t.theme.light : t.theme.dark}
+          </button>
+
           {isLoggedIn ? (
             <div className="user-menu">
               <button className="user-menu-button">
-                Мій профіль ▼
+                {t.header.myProfile}
               </button>
               <div className="user-menu-dropdown">
-                <button onClick={handleProfileClick}>Профіль</button>
-                <button onClick={() => navigate("/bookingByUse")}>Мої бронювання</button>
-                <button onClick={() => navigate("/booking")}>Всі бронювання</button>
-                <button onClick={handleLogout}>Вийти</button>
-                {/* Додайте інші пункти меню за необхідності */}
+                <button onClick={handleProfileClick}>{t.header.profile}</button>
+                <button onClick={() => navigate("/bookingByUse")}>{t.header.myBookings}</button>
+                <button onClick={() => navigate("/booking")}>{t.header.allBookings}</button>
+                <button onClick={handleLogout}>{t.header.logout}</button>
               </div>
             </div>
           ) : (
             <>
               <button
-                style={{
-                  border: "1px solid #000",
-                  borderRadius: "7px",
-                  padding: "8px 20px",
-                  width: "90px",
-                  height: "40px",
-                  background: "#7fa200",
-                  fontFamily: '"Roboto", sans-serif',
-                  fontWeight: "400",
-                  fontSize: "16px",
-                  lineHeight: "150%",
-                  color: "#000",
-                }}
+                className="btn btn-primary"
                 onClick={() => navigate("/login")}
               >
-                Log In
+                {t.header.loginBtn}
               </button>
               <button
-                style={{
-                  border: "2px solid #af52de",
-                  borderRadius: "7px",
-                  padding: "8px 20px",
-                  width: "156px",
-                  height: "40px",
-                  background: "#000",
-                  fontFamily: '"Roboto", sans-serif',
-                  fontWeight: "400",
-                  fontSize: "16px",
-                  lineHeight: "150%",
-                  color: "#fff",
-                }}
+                className="btn btn-secondary"
                 onClick={() => navigate("/register")}
               >
-                Started for free
+                {t.header.signupBtn}
               </button>
             </>
           )}
         </div>
       </ul>
+
       {showModal && userData && (
         <UserProfileModal user={userData} onClose={() => setShowModal(false)} />
       )}
     </div>
   );
 }
-

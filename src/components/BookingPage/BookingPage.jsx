@@ -13,7 +13,7 @@ import BookingModalconfirmation from "./BookingModalconfirmation";
 import BookingModalChooseServices from "./BookingModalChoseServices.jsx";
 
 const cities = [
-  { ua: "Усі міста", en: null, coordinates: [50.4501, 30.5234] },
+  { ua: "Всі міста", en: null, coordinates: [50.4501, 30.5234] },
   { ua: "Київ", en: "Kyiv", coordinates: [50.4501, 30.5234] },
   { ua: "Львів", en: "Lviv", coordinates: [49.8397, 24.0297] },
   { ua: "Одеса", en: "Odesa", coordinates: [46.4825, 30.7233] },
@@ -64,7 +64,7 @@ export default function BookingPage() {
   const prevSearchParamsRef = useRef();
   const [selectedCity, setSelectedCity] = useState(cities[0]);
   const [currentPage, setCurrentPage] = useState(1);
-  const [itemsPerPage] = useState(6);
+  const [itemsPerPage] = useState(5);
   const [userLocation, setUserLocation] = useState(null);
   const [mapCenter, setMapCenter] = useState(selectedCity.coordinates);
   const mapRef = useRef();

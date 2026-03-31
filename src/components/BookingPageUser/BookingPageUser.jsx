@@ -3,6 +3,8 @@ import "./BookingPageUser.css";
 import { getBookingsByUserId, cancelBookingsByBookingId } from "../../../services/sportFild";
 import { sports } from "../HomaPage/InputSection/dateTime";
 import BookingsList from "./BookingsList.jsx";
+import { useContext } from "react";
+import { LanguageContext } from "../../assets/LanguageContext.jsx";
 
 import MapView from "./MapViewUser.jsx";
 import BookingModalDetails from "./BookingModalDetails";
@@ -22,6 +24,9 @@ export default function BookingPageUser() {
   const [highlightedMarker, setHighlightedMarker] = useState(null);
   const mapRef = useRef();
   const userId = localStorage.getItem("userId");
+
+  const { language, setLanguage, translations } = useContext(LanguageContext);
+  const t = translations[language];
 
   const fetchUserBookings = useCallback(async () => {
   try {
@@ -70,7 +75,7 @@ export default function BookingPageUser() {
   }, [fetchUserBookings]);
 
   const handleDeleteBooking = async (bookingId) => {
-    if (!window.confirm("Ви впевнені, що хочете скасувати це бронювання?")) {
+    if (!window.confirm(t.bookingsUser.confirmCancel)) {
       return;
     }
 
@@ -80,7 +85,7 @@ export default function BookingPageUser() {
       await fetchUserBookings();
     } catch (error) {
       console.error("Помилка при видаленні бронювання:", error);
-      alert("Не вдалося скасувати бронювання. Спробуйте ще раз.");
+      alert(t.bookingsUser.cancelError);
     } finally {
       setDeletingId(null);
     }
@@ -104,13 +109,13 @@ export default function BookingPageUser() {
   };
 
   if (loading) {
-    return <div className="loading-indicator">Завантаження...</div>;
+    return <div className="loading-indicator">{t.bookingsUser.loading}</div>;
   }
 
   return (
     <div className="booking-page">
       <div className="left-section">
-        <h2>Мої бронювання</h2>
+        <h2>{t.bookingsUser.myBookings}</h2>
         <BookingsList
           bookings={bookings}
           deletingId={deletingId}

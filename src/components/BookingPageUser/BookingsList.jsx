@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useContext } from "react";
+import { LanguageContext } from "../../assets/LanguageContext";
 import BookingCard from "./BookingCard.jsx";
 
 export default function BookingsList({
@@ -8,10 +9,13 @@ export default function BookingsList({
   handleShowOnMap,
   setSelectedBooking,
 }) {
+  const { language, translations } = useContext(LanguageContext);
+  const t = translations[language];
+
   return bookings.length === 0 ? (
     <div className="no-results-message">
-      <h3>У вас немає активних бронювань</h3>
-      <p>Скористайтесь пошуком, щоб знайти майданчик для гри</p>
+      <h3>{t.bookingsUser.noBookings}</h3>
+      <p>{t.bookingsUser.useSearch}</p>
     </div>
   ) : (
     <div style={{ marginBottom: "50px" }}>

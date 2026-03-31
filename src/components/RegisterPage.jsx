@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { registerUser } from "../../services/authService";
+import { useContext } from "react";
+import { LanguageContext } from "../assets/LanguageContext";
 
 export default function RegisterPage() {
   const navigate = useNavigate();
@@ -12,6 +14,8 @@ export default function RegisterPage() {
   });
   const [errors, setErrors] = useState({});
   const [isLoading, setIsLoading] = useState(false);
+const { language, setLanguage, translations } = useContext(LanguageContext);
+  const t = translations[language];
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -43,7 +47,7 @@ export default function RegisterPage() {
 
   return (
     <div className="form-container">
-      <h2>Create account</h2>
+      <h2>{t.register.title}</h2>
       {/* <button onClick={() => navigate("/login")}>Sign in</button> */}
       <form onSubmit={handleSubmit}>
         {/* <input type="email" placeholder="Your email" /> */}
@@ -99,8 +103,8 @@ export default function RegisterPage() {
         </button>
       </form>
       <p>
-        Already have an account?{" "}
-        <span onClick={() => navigate("/login")} style={{cursor: 'pointer', color:'Green'}}>Login</span>
+        {t.register.alreadyHaveAccount}{" "}
+        <span onClick={() => navigate("/login")} style={{cursor: 'pointer', color:'Green'}}>{t.register.login}</span>
       </p>
     </div>
   );

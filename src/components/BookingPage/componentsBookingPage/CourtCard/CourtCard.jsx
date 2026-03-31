@@ -1,7 +1,30 @@
-import React from "react";
-import { getCorrectType } from "../../BookingPage"; // Assuming getCorrectType is exported from BookingPage
+import React, { useContext } from "react";
+import { LanguageContext } from "../../../../assets/LanguageContext"; // Перевір шлях до контексту
+import { getCorrectType } from "../../BookingPage"; 
 
 const CourtCard = ({ courts, setSelectedCourt, handleShowOnMap }) => {
+  const { language, translations } = useContext(LanguageContext);
+  const t = translations[language];
+
+  // Функція для отримання перекладеної назви спорту для тегів
+  const getTranslatedSportName = (typeId) => {
+    const sportInfo = getCorrectType(typeId);
+    if (!sportInfo) return "Спорт";
+
+    const mapping = {
+      "Tennis": "tennis",
+      "Badminton": "badminton",
+      "Football field": "footballField",
+      "Box": "box",
+      "Ping Pong": "pingPong",
+      "Biliard": "biliard",
+      "Basketball": "basketball"
+    };
+
+    const translationKey = mapping[sportInfo.key];
+    return t.sports[translationKey] || sportInfo.key;
+  };
+
   return (
     <div style={{ marginBottom: "50px" }}>
       {courts.map((court) => (
@@ -17,38 +40,42 @@ const CourtCard = ({ courts, setSelectedCourt, handleShowOnMap }) => {
                   "/src/assets/images/default-image-for-sport-field.png")
               }
               className="card-image"
+              alt={court.title}
             />
             <div className="image-badges">
-              <span className="badge red">❤️ Без комісії</span>
-              <span className="badge yellow">⚡ Онлайн</span>
+              <span className="badge red">{t.courtCard.noCommission}</span>
+              <span className="badge yellow">{t.courtCard.online}</span>
             </div>
           </div>
           <div className="card-info">
             <h3>{court.title}</h3>
-            <p>{court.location?.address ?? "Немає"}</p>
+            <p>{court.location?.address ?? (language === 'uk' ? "Немає" : "No address")}</p>
 
             {/* Відображення всіх видів спорту */}
             <div className="tags">
-              {court.types?.map((sportType, index) => (
-                <span className="tag" key={index}>
-                  <img
-                    src={
-                      getCorrectType(sportType.type)?.icon ||
-                      "/src/assets/images/default-sport.png"
-                    }
-                    alt={getCorrectType(sportType.type)?.name || "Спорт"}
-                    width="20"
-                  />{" "}
-                  {getCorrectType(sportType.type)?.name || "Спорт"}
-                </span>
-              ))}
+              {court.types?.map((sportType, index) => {
+                const sportInfo = getCorrectType(sportType.type);
+                return (
+                  <span className="tag" key={index}>
+                    <img
+                      src={sportInfo?.icon || "/src/assets/images/default-sport.png"}
+                      alt={sportInfo?.key || "Sport"}
+                      width="16"
+                    />{" "}
+                    {getTranslatedSportName(sportType.type)}
+                  </span>
+                );
+              })}
             </div>
+
             {court.warningInformation && (
               <p className="warning">⚠️{court.warningInformation}</p>
             )}
+            
             <p className="description">
-              У цьому клубі можна забронювати корт менше ніж за 1 хвилину
+              {t.courtCard.bookFast}
             </p>
+
             <div
               style={{
                 display: "flex",
@@ -58,21 +85,20 @@ const CourtCard = ({ courts, setSelectedCourt, handleShowOnMap }) => {
             >
               <button
                 className="book-button highlight"
-                onClick={() => {
-                  setSelectedCourt(court);
-                  //setSelectedSportType(selectedSport.name);
-                }}
+                onClick={() => setSelectedCourt(court)}
               >
-                ⚡ Забронювати майданчик у кілька кліків тут →{" "}
+                {t.courtCard.bookButton.split('→')[0]} →{" "}
                 <div
                   style={{
                     backgroundColor: "Blue",
                     padding: "8px",
                     borderRadius: "15px",
                     margin: "0px",
+                    display: "inline-block",
+                    color: "white"
                   }}
                 >
-                  Забронювати
+                  {t.courtCard.book}
                 </div>
               </button>
               <button
@@ -84,7 +110,7 @@ const CourtCard = ({ courts, setSelectedCourt, handleShowOnMap }) => {
                   ])
                 }
               >
-                Показати на карті
+                {t.courtCard.showOnMap}
               </button>
             </div>
           </div>

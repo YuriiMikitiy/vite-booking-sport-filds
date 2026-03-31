@@ -10,11 +10,13 @@ html, body {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  background: rgba(0, 0, 0, 0.7);
-  color: white;
+  background: color-mix(in srgb, var(--bg) 35%, black);
+  color: var(--text);
   padding: 20px 30px;
   border-radius: 8px;
   z-index: 1000;
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow);
 }
 
 .city-select {
@@ -32,37 +34,45 @@ html, body {
   text-align: center;
   padding: 40px;
   margin: 20px 0;
-  background-color: #f8f9fa;
+  background-color: var(--surface);
   border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  box-shadow: var(--shadow);
+  border: 1px solid var(--border);
 }
 
 .no-results-message h3 {
-  color: #dc3545;
+  color: var(--danger);
   margin-bottom: 10px;
 }
 
 .no-results-message p {
-  color: #6c757d;
+  color: var(--muted);
 }
 
 /* Загальний контейнер */
 .booking-page {
   display: flex;
-  height: 100vh;
+  height: 100%;
+  min-height: calc(100vh - 82px);
   overflow: hidden;
-  background-color: #55787e;
+  background-color: var(--bg);
+  color: var(--text);
+  transition: background-color var(--dur-2) var(--ease-out), color var(--dur-2) var(--ease-out);
+  isolation: isolate;
 }
 
 /* Ліва секція */
 .left-section {
   flex: 3;
-  margin-top: 16px;
-  padding: 0 20px;
-  height: calc(100vh - 70px);
+  margin-top: 0;
+  padding: 10px 16px 0;
+  height: 100%;
   overflow-y: auto;
   scrollbar-width: auto;
-  scrollbar-color: #55787e transparent;
+  scrollbar-color: color-mix(in srgb, var(--primary) 35%, var(--border)) transparent;
+  background: color-mix(in srgb, var(--surface) 45%, transparent);
+  border-right: 1px solid var(--border);
+  transition: background-color var(--dur-2) var(--ease-out), border-color var(--dur-2) var(--ease-out);
 }
 
 .left-section::-webkit-scrollbar {
@@ -70,26 +80,34 @@ html, body {
 }
 
 .left-section::-webkit-scrollbar-track {
-  background: #e0e0e0;
+  background: color-mix(in srgb, var(--surface) 55%, transparent);
   border-radius: 4px;
 }
 
 .left-section::-webkit-scrollbar-thumb {
-  background-color: #55787e;
+  background-color: color-mix(in srgb, var(--primary) 35%, var(--surface));
   border-radius: 4px;
 }
 
 /* Права секція */
 .right-section {
   flex: 2;
-  height: 100vh;
+  height: 100%;
   position: sticky;
   top: 0;
+  background: color-mix(in srgb, var(--surface) 70%, transparent);
+  border-left: 1px solid var(--border);
+  transition: background-color var(--dur-2) var(--ease-out), border-color var(--dur-2) var(--ease-out);
 }
 
 .leaflet-container {
   height: 100%;
   width: 100%;
+  background: var(--surface);
+}
+
+html[data-theme="dark"] .right-section .leaflet-tile {
+  filter: brightness(0.82) contrast(1.1) saturate(0.8) hue-rotate(180deg);
 }
 
 /* Назва міста */
@@ -97,14 +115,14 @@ html, body {
   font-size: 24px;
   font-weight: bold;
   margin-bottom: 12px;
-  color: #000;
+  color: var(--text);
 }
 
 /* Поля пошуку */
 .search-fields {
   display: flex;
-  gap: 10px;
-  margin-bottom: 16px;
+  gap: 8px;
+  margin-bottom: 10px;
   flex-wrap: wrap;
 
 }
@@ -115,27 +133,32 @@ html, body {
   border-radius: 8px;
   width: 100%;
   font-size: 18px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  background: var(--surface);
+  color: var(--text);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow);
 }
 
 .results-count {
   margin: 16px 0;
   font-size: 14px;
-  color: #fff;
+  color: var(--text-2);
 }
 
 
 /* СТИЛІ ДЛЯ НОВОЇ КАРТКИ */
 .card {
-  background-color: #55787e;
+  background: color-mix(in srgb, var(--surface) 72%, transparent);
   border-radius: 20px;
   flex-direction: row; /* гарантує розміщення зліва направо */
   padding: 16px;
   margin-bottom: 20px;
   display: flex;
   gap: 20px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  box-shadow: var(--shadow);
   align-items: flex-start;
+  border: 1px solid var(--border);
+  backdrop-filter: blur(10px);
 }
 
 /* Зображення та бейджі */
@@ -158,19 +181,19 @@ html, body {
 .badge {
   padding: 4px 10px;
   border-radius: 12px;
-  color: white;
+  color: var(--on-primary);
   font-size: 12px;
   font-weight: bold;
   width: fit-content;
 }
 
 .badge.red {
-  background-color: #e53935;
+  background-color: var(--danger);
 }
 
 .badge.yellow {
-  background-color: #fbc02d;
-  color: #000;
+  background-color: #fbbf24;
+  color: #111827;
 }
 
 .card-image {
@@ -187,13 +210,13 @@ html, body {
   flex-direction: column;
   font-size: 14px;
   gap: 8px;
-  color: #000;
+  color: var(--text-2);
 }
 
 .card-info h3 {
   margin: 0;
   font-size: 20px;
-  color: #333;
+  color: var(--text);
 }
 
 /* Теги */
@@ -204,31 +227,37 @@ html, body {
 }
 
 .tag {
-  background-color: #f0f0f0;
+  background-color: var(--chip-bg);
   border-radius: 14px;
   padding: 4px 10px;
   font-size: 13px;
   font-weight: 500;
+  color: var(--chip-text);
+  border: 1px solid var(--border);
 }
 
 /* Попередження */
 .alert {
   font-size: 13px;
-  color: #d32f2f;
-  background-color: #fff3f3;
-  border-left: 4px solid #d32f2f;
+  color: var(--danger);
+  background-color: color-mix(in srgb, var(--danger) 10%, var(--surface));
+  border-left: 4px solid var(--danger);
   padding: 8px 12px;
   border-radius: 8px;
+  border-top: 1px solid var(--border);
+  border-right: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
 }
 
 /* Примітка швидкого бронювання */
 .fast-booking-note {
   font-size: 14px;
-  background-color: #f3f3f3;
+  background-color: var(--surface-2);
   padding: 10px;
   border-radius: 10px;
-  color: #333;
+  color: var(--text);
   margin-top: 10px;
+  border: 1px solid var(--border);
 }
 
 /* Кнопка бронювання */
@@ -236,7 +265,7 @@ html, body {
   display: inline-flex;
   align-items: center;
   justify-content: space-between;
-  background-color: #e3e3e3c8;
+  background-color: color-mix(in srgb, var(--surface) 80%, transparent);
   padding: 10px 14px;
   border-radius: 12px;
   font-weight: 600;
@@ -246,11 +275,15 @@ html, body {
   border: none;
   cursor: pointer;
   margin-top: 10px;
-  transition: background-color 0.3s ease;
+  transition: transform var(--dur-1) var(--ease-out), background-color var(--dur-2) var(--ease-out);
+  color: var(--text);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow);
 }
 
 .book-button:hover {
-  background-color: #d0d0d0;
+  background-color: var(--surface-2);
+  transform: translateY(-1px);
 }
 
 .book-button span {
@@ -259,22 +292,23 @@ html, body {
 
 /* Варіант для кнопки з іконкою ⚡ */
 .book-button.full {
-  background-color: #3d5afe;
-  color: white;
+  background: linear-gradient(135deg, var(--primary), var(--primary-2));
+  color: var(--on-primary);
   margin-top: 12px;
   font-size: 16px;
   font-weight: 600;
   justify-content: center;
   padding: 12px;
+  border-color: rgba(255, 255, 255, 0.16);
 }
 
 .book-button.full:hover {
-  background-color: #2a47c2;
+  background: linear-gradient(135deg, color-mix(in srgb, var(--primary) 85%, black), color-mix(in srgb, var(--primary-2) 85%, black));
 }
 
 .show-on-map-button {
-  background-color: #4CAF50;
-  color: white;
+  background: linear-gradient(135deg, var(--accent), color-mix(in srgb, var(--accent) 60%, var(--primary-2)));
+  color: var(--on-primary);
   border: none;
   margin-top: 10px;
   padding: 10px 14px;
@@ -282,11 +316,13 @@ html, body {
   cursor: pointer;
   font-size: 14px;
   margin-left: 10px;
-  transition: background-color 0.3s;
+  transition: transform var(--dur-1) var(--ease-out), background-color var(--dur-2) var(--ease-out);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  box-shadow: var(--shadow);
 }
 
 .show-on-map-button:hover {
-  background-color: #45a049;
+  transform: translateY(-1px);
 }
 
 /* Пагінація */
@@ -302,17 +338,20 @@ html, body {
   padding: 8px 12px;
   border-radius: 6px;
   border: none;
-  background-color: #ccc;
+  background-color: var(--surface);
   cursor: pointer;
+  color: var(--text);
+  border: 1px solid var(--border);
 }
 
 .pagination .active {
-  background-color: #4f8bfc;
-  color: #fff;
+  background: linear-gradient(135deg, var(--primary), var(--primary-2));
+  color: var(--on-primary);
+  border-color: rgba(255, 255, 255, 0.16);
 }
 
 .pagination button:hover {
-  background-color: #aaa;
+  background-color: var(--surface-2);
 }
 
 @media (max-width: 768px) {

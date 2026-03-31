@@ -12,7 +12,7 @@
 
 .select-container {
     position: relative;
-    width: 258px;
+    width: 220px;
     align-items: left;
 }
 .select-container2 {
@@ -22,42 +22,61 @@
 }
 
 .select-container img {
-    width: 20px;
-    height: 20px;
+    width: 16px;
+    height: 16px;
     margin-right: 6px;
 }
 
 .select-box {
-    background: #eef;
-    color: #0a0a0a;
-    padding: 0px 12px;
-    border-radius: 15px;
+    background: var(--surface);
+    color: var(--text);
+    padding: 0 10px;
+    border-radius: 12px;
     cursor: pointer;
     display: flex;
-    flex-wrap: wrap;
+    justify-content: space-between;
     align-items: center;
-    font-weight: bold;
-    width: 234px;
+    font-weight: 600;
+    width: 100%;
     appearance: listbox;
-    height: 54.2px;
+    height: 44px;
+    font-size: 14px;
+    border: 1px solid var(--border);
+    box-shadow: var(--shadow);
+}
+
+.selected-sport-value {
+    display: inline-flex;
+    align-items: center;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.select-box-arrow {
+    margin-left: 8px;
+    flex-shrink: 0;
+    font-size: 12px;
 }
 
 .select-box:hover {
-    background: #dde;
+    background: var(--surface-2);
 }
 
 .select-dropdown {
     display: none;
     position: absolute;
     width: 100%;
-    background: white;
-    border-radius: 30px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    background: var(--surface);
+    border-radius: 12px;
+    box-shadow: var(--shadow);
     margin-top: 5px;
     padding: 5px 0;
     z-index: 100;
     max-height: 200px;
     overflow-y: auto;
+    border: 1px solid var(--border);
 }
 
 .select-dropdown.show {
@@ -67,18 +86,18 @@
 
 .select-dropdown li {
     list-style: none;
-    color: #0a0a0a;
+    color: var(--text);
     padding: 10px;
     cursor: pointer;
     display: flex;
     align-items: center;
     gap: 10px;
-    font-size: 16px;
-    width: 238px;
+    font-size: 14px;
+    width: 100%;
 }
 
 .select-dropdown li:hover {
-    background: #eef;
+    background: var(--surface-2);
 }
 
 .select-dropdown li img {
@@ -92,27 +111,29 @@
     width: 480px; 
     height: 51px;
     padding: 12px;
-    background: #eef;
+    background: var(--surface);
     border-radius: 15px;
-    color: black;
+    color: var(--text);
     height: 54.2px;
     font-size: 18px;
     box-sizing: border-box;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    box-shadow: var(--shadow);
+    border: 1px solid var(--border);
 }
 
 .find-box {
-    background: #eef;
-    color: #0a0a0a;
+    background: var(--surface);
+    color: var(--text);
     border-radius: 15px;
     display: flex;
     align-items: center;
     width: 100%;
     height: 54px;
     padding: 0 15px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    box-shadow: var(--shadow);
     gap: 10px; /* Відступ між іконкою та інпутом */
     cursor: text;
+    border: 1px solid var(--border);
 }
 
 .search-icon {
@@ -126,8 +147,8 @@
     background: transparent;
     border: none;
     outline: none;
-    font-size: 16px;
-    color: black;
+    font-size: 15px;
+    color: var(--text);
 }
 
 .select-container-date {
@@ -136,21 +157,22 @@
 }
 
 .select-container-date input[type="date"] {
-    width: 171px; /* Ширина, аналогічна до .select-box */
-    height: 51px;
-    padding: 0 12px;
-    background: #eef;
-    border-radius: 15px;
+    width: 150px;
+    height: 44px;
+    padding: 0 10px;
+    background: var(--surface);
+    border-radius: 12px;
     border: none;
-    font-size: 16px;
-    color: #0a0a0a;
+    font-size: 14px;
+    color: var(--text);
     font-weight: bold;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    box-shadow: var(--shadow);
     cursor: pointer;
+    border: 1px solid var(--border);
 }
 
 .select-container-date input[type="date"]:hover {
-    background: #dde;
+    background: var(--surface-2);
 }
 
 /* Стилі для календаря (псевдоелементи) */
@@ -162,5 +184,42 @@
 
 .select-container-date input[type="date"]:focus {
     outline: none;
-    background: #eef;
+    background: var(--surface);
+}
+
+
+.search-wrapper {
+    position: relative;
+    display: inline-block;
+}
+
+.search-btn {
+    border-radius: 15px;
+    padding: 4px 20px;
+    width: 134px;
+    height: 51px;
+    background: #7fa200;
+    font-size: 20px;
+    color: #000;
+    cursor: pointer;
+}
+
+.search-hint {
+    position: absolute;
+    top: 90px; /* нижче кнопки */
+    right: -180px; /* зсув вправо */
+    width: 220px;
+    color: white;
+    font-size: 14px;
+    line-height: 1.3;
+}
+
+/* Крива стрілка */
+.arrow {
+    display: block;
+    font-size: 30px;
+    transform: rotate(250deg);
+    margin-bottom: -10px;
+    margin-left: 2px;
+    color: #7fa200;
 }

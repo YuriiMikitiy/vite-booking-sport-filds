@@ -56,15 +56,9 @@ export default function MapView({
 
   return (
     <MapContainer
+      className="map-view-container"
       center={mapCenter}
       zoom={13}
-      style={{
-        height: "550px",
-        width: "500px",
-        marginLeft: "42px",
-        borderRadius: "15px",
-        marginTop: "24px",
-      }}
       whenCreated={(map) => {
         mapRef.current = map;
       }}

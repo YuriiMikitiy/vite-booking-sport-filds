@@ -1,7 +1,7 @@
 .select-container-time-at {
     position: relative;
     width: 170px;
-    background-color: var(--surface);
+    background-color: var(--surface-solid);
     border-radius: 12px;
     height: 44px;
     border: 1px solid var(--border);
@@ -42,7 +42,7 @@
     right: 0;
     border: 1px solid var(--border);
     border-radius: 12px;
-    background-color: var(--surface);
+    background-color: var(--surface-solid);
     list-style: none;
     padding: 0;
     margin: 0;
@@ -62,7 +62,7 @@
   }
   
   .select-dropdown-time-at li:hover {
-    background-color: var(--surface-2);
+    background-color: var(--surface-2-solid);
   }
   
   .select-dropdown-time-at li:not(:last-child) {

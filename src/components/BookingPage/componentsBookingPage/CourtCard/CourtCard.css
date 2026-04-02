@@ -2,10 +2,10 @@
   background: color-mix(in srgb, var(--surface) 72%, transparent);
   border-radius: 20px;
   flex-direction: row;
-  padding: 16px;
-  margin-bottom: 20px;
+  padding: 14px;
+  margin-bottom: 16px;
   display: flex;
-  gap: 20px;
+  gap: 16px;
   box-shadow: var(--shadow);
   align-items: flex-start;
   border: 1px solid var(--border);
@@ -14,8 +14,8 @@
 
 .card-image-container {
   flex-shrink: 0;
-  width: 300px;
-  height: 176px;
+  width: 255px;
+  height: 150px;
   position: relative;
 }
 
@@ -29,10 +29,10 @@
 }
 
 .badge {
-  padding: 4px 10px;
+  padding: 3px 9px;
   border-radius: 12px;
   color: var(--on-primary);
-  font-size: 11px;
+  font-size: 10px;
   font-weight: bold;
   width: fit-content;
 }
@@ -57,14 +57,14 @@
   flex: 1;
   display: flex;
   flex-direction: column;
-  font-size: 14px;
-  gap: 8px;
+  font-size: 13px;
+  gap: 7px;
   color: var(--text-2);
 }
 
 .card-info h3 {
   margin: 0;
-  font-size: 20px;
+  font-size: 17px;
   color: var(--text);
 }
 
@@ -77,8 +77,8 @@
 .tag {
   background-color: var(--chip-bg);
   border-radius: 14px;
-  padding: 4px 10px;
-  font-size: 13px;
+  padding: 3px 8px;
+  font-size: 12px;
   font-weight: 500;
   color: var(--chip-text);
   border: 1px solid var(--border);
@@ -88,10 +88,51 @@
 }
 
 .tag img {
-  width: 16px;
-  height: 16px;
+  width: 14px;
+  height: 14px;
   object-fit: contain;
   opacity: 0.92;
+}
+
+.rating-wrap {
+  text-align: right;
+  min-width: 145px;
+}
+
+.rating-stars {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  font-size: 16px;
+  justify-content: flex-end;
+}
+
+.star-full {
+  color: #fbbf24;
+}
+
+.star-empty {
+  color: #cbd5e1;
+}
+
+.rating-value {
+  margin-left: 8px;
+  color: var(--text);
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.rating-count {
+  margin: 4px 0 0 0;
+  font-size: 13px;
+  color: var(--muted);
+  font-weight: 500;
+}
+
+.rating-empty {
+  margin: 4px 0 0 0;
+  font-size: 12px;
+  color: var(--muted);
 }
 
 .warning {
@@ -107,9 +148,9 @@
 }
 
 .description {
-  font-size: 14px;
+  font-size: 13px;
   background-color: var(--surface-2);
-  padding: 10px;
+  padding: 8px;
   border-radius: 10px;
   color: var(--text);
   margin-top: 10px;
@@ -128,10 +169,10 @@
   align-items: center;
   justify-content: space-between;
   background-color: color-mix(in srgb, var(--surface) 80%, transparent);
-  padding: 10px 14px;
+  padding: 8px 12px;
   border-radius: 12px;
   font-weight: 600;
-  font-size: 15px;
+  font-size: 13px;
   width: 100%;
   border: none;
   cursor: pointer;
@@ -158,10 +199,10 @@
   background: linear-gradient(135deg, var(--accent), color-mix(in srgb, var(--accent) 60%, var(--primary-2)));
   color: var(--on-primary);
   border: none;
-  padding: 10px 14px;
+  padding: 8px 12px;
   border-radius: 15px;
   cursor: pointer;
-  font-size: 14px;
+  font-size: 13px;
   margin-left: 10px;
   transition: transform var(--dur-1) var(--ease-out), background-color var(--dur-2) var(--ease-out);
   white-space: nowrap;

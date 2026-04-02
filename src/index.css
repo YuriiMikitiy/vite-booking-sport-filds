@@ -16,10 +16,12 @@
   --dur-2: 220ms;
 
   /* Light theme tokens */
-  --bg: #f6f8fc;
+  --bg: #eef2f8;
   --bg-elev: rgba(255, 255, 255, 0.75);
   --surface: #ffffff;
-  --surface-2: #f1f5ff;
+  --surface-2: #eaf0fb;
+  --surface-solid: #ffffff;
+  --surface-2-solid: #eef4ff;
   --chip-bg: #f1f5ff;
   --chip-text: #0b1020;
   --text: #0b1020;
@@ -36,9 +38,9 @@
 
   --focus: rgba(109, 40, 217, 0.35);
   --ring: 0 0 0 4px var(--focus);
-  --bg-glow-1: rgba(109, 40, 217, 0.16);
-  --bg-glow-2: rgba(16, 185, 129, 0.14);
-  --bg-glow-3: rgba(79, 70, 229, 0.12);
+  --bg-glow-1: rgba(109, 40, 217, 0.09);
+  --bg-glow-2: rgba(16, 185, 129, 0.08);
+  --bg-glow-3: rgba(79, 70, 229, 0.07);
 
   color-scheme: light;
 
@@ -56,6 +58,8 @@ html[data-theme="dark"] {
   --bg-elev: rgba(7, 10, 20, 0.6);
   --surface: rgba(255, 255, 255, 0.06);
   --surface-2: rgba(255, 255, 255, 0.08);
+  --surface-solid: #0c1222;
+  --surface-2-solid: #121c34;
   --chip-bg: #e9efff;
   --chip-text: #0b1020;
   --text: rgba(255, 255, 255, 0.92);
@@ -99,6 +103,12 @@ body {
 main {
   min-height: 100vh;
   background: transparent;
+}
+
+@media (min-width: 1200px) {
+  body {
+    font-size: 15px;
+  }
 }
 
 a {

@@ -8,6 +8,7 @@ export default function BookingsList({
   handleDeleteBooking,
   handleShowOnMap,
   setSelectedBooking,
+  onReviewAdded,
 }) {
   const { language, translations } = useContext(LanguageContext);
   const t = translations[language];
@@ -27,6 +28,7 @@ export default function BookingsList({
           handleDeleteBooking={handleDeleteBooking}
           handleShowOnMap={handleShowOnMap}
           setSelectedBooking={setSelectedBooking}
+          onReviewAdded={onReviewAdded}
         />
       ))}
     </div>

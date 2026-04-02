@@ -1,0 +1,92 @@
+.review-form {
+  margin-top: 12px;
+  padding: 12px;
+  border-radius: 12px;
+  border: 1px solid var(--border);
+  background: color-mix(in srgb, var(--surface) 90%, transparent);
+  box-shadow: var(--shadow);
+}
+
+.review-form-title {
+  margin: 0 0 8px;
+  color: var(--text);
+  font-size: 15px;
+}
+
+.review-form-label {
+  display: block;
+  margin: 6px 0 6px;
+  color: var(--text-2);
+  font-size: 13px;
+}
+
+.review-stars {
+  display: flex;
+  gap: 4px;
+}
+
+.review-star {
+  border: none;
+  background: transparent;
+  color: #cbd5e1;
+  font-size: 22px;
+  line-height: 1;
+  cursor: pointer;
+  padding: 0 2px;
+}
+
+.review-star.active {
+  color: #f59e0b;
+}
+
+.review-textarea {
+  width: 100%;
+  resize: vertical;
+  min-height: 72px;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  background: var(--surface-solid);
+  color: var(--text);
+  padding: 8px 10px;
+  font-size: 13px;
+}
+
+.review-counter {
+  text-align: right;
+  color: var(--muted);
+  font-size: 11px;
+  margin-top: 4px;
+}
+
+.review-error {
+  color: var(--danger);
+  font-size: 12px;
+  margin: 6px 0 0;
+}
+
+.review-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.review-cancel-btn,
+.review-submit-btn {
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  padding: 7px 10px;
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.review-cancel-btn {
+  background: var(--surface-solid);
+  color: var(--text);
+}
+
+.review-submit-btn {
+  background: linear-gradient(135deg, var(--primary), var(--primary-2));
+  color: var(--on-primary);
+}

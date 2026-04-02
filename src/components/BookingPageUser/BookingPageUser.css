@@ -152,16 +152,14 @@ html, body {
 }
 
 .booking-actions {
-  position: absolute;
-  left: 10px;
-  right: 0;
-  margin-top: 200px;
-  border-bottom-left-radius: 20px;
-  border-bottom-right-radius: 20px;
-  padding: 10px 16px;
+  position: static;
+  margin-top: 12px;
+  padding: 0;
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-start;
   align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
 }
 
 .loading-indicator {
@@ -241,12 +239,21 @@ html, body {
 
 .right-section {
   flex: 2;
-  height: 100vh;
+  height: 100%;
   position: sticky;
   top: 0;
+  padding: 12px;
+  box-sizing: border-box;
 }
 
 .leaflet-container {
+  height: 100%;
+  width: 100%;
+  border-radius: 14px;
+  overflow: hidden;
+}
+
+.map-view-container {
   height: 100%;
   width: 100%;
 }
@@ -291,7 +298,8 @@ html, body {
   gap: 20px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   align-items: flex-start;
-  height: 280px;
+  min-height: 280px;
+  height: auto;
 }
 
 .card-image-container {

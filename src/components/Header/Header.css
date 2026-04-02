@@ -73,7 +73,7 @@
   border: 1px solid var(--border);
   border-radius: 7px;
   padding: 8px 20px;
-  background: linear-gradient(135deg, var(--accent), rgba(16,185,129,0.65));
+  background: linear-gradient(135deg, var(--accent), color-mix(in srgb, var(--accent) 60%, var(--primary-2)));
   font-family: "Roboto", sans-serif;
   font-weight: 400;
   font-size: 16px;
@@ -87,7 +87,7 @@
   display: none;
   position: absolute;
   right: 0;
-  background-color: var(--surface);
+  background-color: var(--surface-solid);
   min-width: 160px;
   box-shadow: var(--shadow);
   z-index: 1;
@@ -103,12 +103,12 @@
   width: 100%;
   text-align: left;
   border: none;
-  background: none;
+  background: var(--surface-solid);
   cursor: pointer;
 }
 
 .user-menu-dropdown button:hover {
-  background-color: var(--surface-2);
+  background-color: var(--surface-2-solid);
 }
 
 .user-menu:hover .user-menu-dropdown {
@@ -156,7 +156,7 @@
   padding: 8px 12px;
   border-radius: 12px;
   border: 1px solid var(--border);
-  background: color-mix(in srgb, var(--surface) 75%, transparent);
+  background: var(--surface-solid);
   color: var(--text);
   font-weight: 700;
   cursor: pointer;
@@ -166,13 +166,13 @@
 
 .theme-toggle:hover {
   transform: translateY(-1px);
-  background: var(--surface-2);
+  background: var(--surface-2-solid);
 }
 
 /* Стилізація вибору мови */
 .language-select {
   appearance: none; /* Прибирає стандартний стиль браузера */
-  background-color: var(--surface); /* Використовує колір фону вашої теми */
+  background-color: var(--surface-solid); /* Використовує колір фону вашої теми */
   color: var(--text); /* Використовує колір тексту вашої теми */
   border: 1px solid var(--border);
   border-radius: 8px;
@@ -187,7 +187,7 @@
 
 .language-select:hover {
   border-color: var(--accent);
-  background-color: var(--surface-2);
+  background-color: var(--surface-2-solid);
 }
 
 .language-select:focus {
@@ -197,6 +197,6 @@
 
 /* Опції всередині селектора (деякі браузери обмежують стилізацію опцій) */
 .language-select option {
-  background-color: var(--surface);
+  background-color: var(--surface-solid);
   color: var(--text);
 }

@@ -1,13 +1,13 @@
 
 .inputSection {
-    margin-top: 168px;
-    margin-left: 164px;
+    margin-top: clamp(84px, 9vh, 132px);
+    margin-left: clamp(16px, 4vw, 64px);
     display: flex;
     flex-wrap: wrap; /* Дозволяє переносити елементи */
-    gap: 44px; /* Відступ між елементами */
-    width: 800px;
+    gap: clamp(14px, 2vw, 30px);
+    width: min(100%, 680px);
     height: 160px;
-    margin-right: 164px;
+    margin-right: clamp(16px, 2vw, 36px);
 }
 
 .select-container {
@@ -17,7 +17,7 @@
 }
 .select-container2 {
     position: relative;
-    width: 480px;
+    width: min(430px, 100%);
     /* align-items: left; */
 }
 
@@ -61,7 +61,7 @@
 }
 
 .select-box:hover {
-    background: var(--surface-2);
+    background: var(--surface-2-solid);
 }
 
 .select-dropdown {
@@ -97,7 +97,7 @@
 }
 
 .select-dropdown li:hover {
-    background: var(--surface-2);
+    background: var(--surface-2-solid);
 }
 
 .select-dropdown li img {
@@ -172,7 +172,7 @@
 }
 
 .select-container-date input[type="date"]:hover {
-    background: var(--surface-2);
+    background: var(--surface-2-solid);
 }
 
 /* Стилі для календаря (псевдоелементи) */
@@ -184,7 +184,7 @@
 
 .select-container-date input[type="date"]:focus {
     outline: none;
-    background: var(--surface);
+    background: var(--surface-solid);
 }
 
 
@@ -196,12 +196,38 @@
 .search-btn {
     border-radius: 15px;
     padding: 4px 20px;
-    width: 134px;
-    height: 51px;
+    width: 120px;
+    height: 44px;
     background: #7fa200;
-    font-size: 20px;
+    font-size: 17px;
     color: #000;
     cursor: pointer;
+}
+
+.home-layout {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: clamp(12px, 2vw, 24px);
+    padding-right: clamp(12px, 3vw, 48px);
+}
+
+.home-side-image {
+    height: clamp(290px, 40vh, 440px);
+    margin-top: clamp(86px, 10vh, 120px);
+    margin-right: clamp(8px, 1vw, 16px);
+    object-fit: contain;
+}
+
+@media (max-width: 1200px) {
+    .home-layout {
+        flex-wrap: wrap;
+    }
+
+    .home-side-image {
+        margin-left: auto;
+        margin-right: auto;
+    }
 }
 
 .search-hint {

@@ -62,6 +62,8 @@ html, body {
   height: 100%;
   position: sticky;
   top: 0;
+  padding: 12px;
+  box-sizing: border-box;
   background: color-mix(in srgb, var(--surface) 70%, transparent);
   border-left: 1px solid var(--border);
   transition: background-color var(--dur-2) var(--ease-out), border-color var(--dur-2) var(--ease-out);
@@ -71,6 +73,13 @@ html, body {
   height: 100%;
   width: 100%;
   background: var(--surface);
+  border-radius: 14px;
+  overflow: hidden;
+}
+
+.map-view-container {
+  height: 100%;
+  width: 100%;
 }
 
 html[data-theme="dark"] .right-section .leaflet-tile {

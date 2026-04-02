@@ -34,7 +34,13 @@ export default function BookingModalconfirmation({ court, bookingInfo, onClose }
         <h2>Підтвердження бронювання</h2>
         <h3>{bookingInfo.court || bookingInfo.title}</h3>
         <p><strong>Локація:</strong> {bookingInfo.sportsField.location?.address || bookingInfo.location}</p>
-        <p><strong>Вид спорту:</strong> {getCorrectType(court.type).name}</p>
+        <p>
+  <strong>Вид спорту:</strong>{" "}
+  {court.types?.length > 0
+    ? getCorrectType(court.types[0].type)?.key
+    : "Не вказано"}
+    
+</p>
         <p><strong>Час:</strong> {formatTime(startTime)} - {formatTime(endTime)}</p>
         <p><strong>Вартість:</strong> {bookingInfo.totalPrice} грн</p>
         <p><strong>Коментар:</strong> {bookingInfo.comment ? bookingInfo.comment : "Коментаря немає"}</p>

@@ -1,10 +1,12 @@
 .form-container {
-    background: white;
+    background: var(--surface-solid);
+    color: var(--text);
+    border: 1px solid var(--border);
     padding: 30px;
     border-radius: 10px;
     width: 400px;
     margin: 50px auto;
-    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    box-shadow: var(--shadow);
   }
   
   .form-container h2 {
@@ -22,13 +24,26 @@
     padding: 10px;
     font-size: 16px;
     border-radius: 15px;
+    border: 1px solid var(--border);
+    background: var(--surface-solid);
+    color: var(--text);
   }
   
   .form-container button {
     padding: 10px;
-    background-color: black;
-    color: white;
+    background: linear-gradient(135deg, var(--primary), var(--primary-2));
+    color: var(--on-primary);
+    border: 1px solid rgba(255, 255, 255, 0.16);
+    border-radius: 12px;
     font-size: 16px;
     cursor: pointer;
+  }
+
+  .form-container p,
+  .form-container h2,
+  .form-container label,
+  .form-container span,
+  .form-container div {
+    color: var(--text);
   }
   

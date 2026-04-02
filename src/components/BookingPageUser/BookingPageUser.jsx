@@ -122,6 +122,7 @@ export default function BookingPageUser() {
           handleDeleteBooking={handleDeleteBooking}
           handleShowOnMap={handleShowOnMap}
           setSelectedBooking={setSelectedBooking}
+          onReviewAdded={fetchUserBookings}
         />
       </div>
       <div className="right-section">

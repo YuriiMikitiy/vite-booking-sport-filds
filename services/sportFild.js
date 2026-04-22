@@ -1,8 +1,8 @@
-
 import axios from "axios";
+import { API_BASE } from "../src/config/api.js";
 
-const API_BASE_URL = 'https://localhost:44313/api/SportsFields';
-const API_BASE_URL_BOOKING = 'https://localhost:44313/api/Booking';
+const API_BASE_URL = `${API_BASE}/SportsFields`;
+const API_BASE_URL_BOOKING = `${API_BASE}/Booking`;
 
 export const fetchSportFild = async () => {
     try {

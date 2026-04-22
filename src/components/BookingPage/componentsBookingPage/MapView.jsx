@@ -60,7 +60,7 @@ export default function MapView({
       center={mapCenter}
       zoom={13}
       whenCreated={(map) => {
-        mapRef.current = map;
+        if (mapRef) mapRef.current = map;
       }}
       key={`${mapCenter[0]}-${mapCenter[1]}`}
     >

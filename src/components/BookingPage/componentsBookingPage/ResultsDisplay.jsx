@@ -1,6 +1,6 @@
 import React, { useContext } from "react";
 import { LanguageContext } from "../../../assets/LanguageContext.jsx";
-import CourtCard from "../componentsBookingPage/CourtCard/CourtCard.jsx" 
+import CourtCard from "./CourtCard/CourtCard.jsx";
 import { getCorrectVariantWord } from "../BookingPage.jsx";
 
 export default function ResultsDisplay({ sportFild, noResultsFound, currentPage, itemsPerPage, setSelectedCourt, handleShowOnMap }) {

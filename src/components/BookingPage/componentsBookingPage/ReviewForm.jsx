@@ -1,6 +1,8 @@
 import React, { useContext, useState } from "react";
 import axios from "axios";
 import { LanguageContext } from "../../../assets/LanguageContext";
+import { useToast } from "../../../context/ToastContext.jsx";
+import { API_BASE } from "../../../config/api.js";
 import "./ReviewForm.css";
 
 const MAX_COMMENT_LENGTH = 300;
@@ -20,6 +22,7 @@ export default function ReviewForm({
 
   const { language, translations } = useContext(LanguageContext);
   const t = translations[language];
+  const { showToast } = useToast();
 
   const activeStars = hovered > 0 ? hovered : rating;
 
@@ -37,7 +40,7 @@ export default function ReviewForm({
 
       console.log("Відправляємо відгук:", { sportsFieldId, userId, bookingId, rating });
 
-      await axios.post("https://localhost:44313/api/reviews", {
+      await axios.post(`${API_BASE}/reviews`, {
         sportsFieldId,
         userId,
         bookingId: bookingId || null,        // передаємо bookingId, якщо є
@@ -45,7 +48,7 @@ export default function ReviewForm({
         comment: comment.trim() || null,
       });
 
-      alert(t.reviewForm.success || "Дякуємо! Ваш відгук успішно додано.");
+      showToast(t.reviewForm.success || "Дякуємо! Ваш відгук успішно додано.", "success");
       
       if (onReviewAdded) onReviewAdded();
       if (onClose) onClose();

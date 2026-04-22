@@ -1,5 +1,7 @@
 // src/services/authService.js
-const API_BASE_URL = 'https://localhost:44313/api';
+import { API_BASE } from "../src/config/api.js";
+
+const API_BASE_URL = API_BASE;
 
 export const registerUser = async (userData) => {
   console.log('Sending registration data:', userData);
@@ -31,11 +33,9 @@ export const registerUser = async (userData) => {
 };
 
 
-const API_BASE_URL2 = 'https://localhost:44313';
-
 export const loginUser = async (credentials) => {
   try {
-    const response = await fetch(`${API_BASE_URL2}/api/Account/login`, {
+    const response = await fetch(`${API_BASE_URL}/Account/login`, {
       method: 'POST',
       headers: {
         'accept': 'application/json',

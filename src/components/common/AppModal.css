@@ -1,0 +1,267 @@
+/* Shared modal shell — uses tokens from index.css (light / html[data-theme="dark"]) */
+
+@keyframes app-modal-fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes app-modal-slideUp {
+  from {
+    transform: translateY(10px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.app-modal-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1200;
+  padding: max(12px, env(safe-area-inset-top, 12px)) max(12px, env(safe-area-inset-right, 12px))
+    max(12px, env(safe-area-inset-bottom, 12px)) max(12px, env(safe-area-inset-left, 12px));
+  background: color-mix(in srgb, var(--bg) 38%, rgba(0, 0, 0, 0.52));
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+  animation: app-modal-fadeIn 0.2s ease-out;
+}
+
+.app-modal-panel {
+  background: var(--surface-solid);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow);
+  color: var(--text);
+  width: 100%;
+  max-width: min(520px, calc(100vw - 24px));
+  max-height: min(90dvh, calc(100dvh - 24px));
+  min-height: 0;
+  overflow: auto;
+  overflow-x: hidden;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior: contain;
+  touch-action: pan-y;
+  padding: 1.25rem 1.25rem 1.35rem;
+  position: relative;
+  animation: app-modal-slideUp 0.22s var(--ease-out) forwards;
+}
+
+.app-modal-panel--wide {
+  max-width: min(620px, calc(100vw - 24px));
+}
+
+.app-modal-title {
+  margin: 0 0 0.75rem;
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: var(--text);
+  line-height: 1.3;
+}
+
+.app-modal-panel h2:not(.app-modal-title) {
+  margin: 0 0 0.65rem;
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--text);
+}
+
+.app-modal-panel h3 {
+  margin: 0 0 0.5rem;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.app-modal-panel p {
+  margin: 0 0 0.65rem;
+  font-size: 0.9rem;
+  color: var(--text-2);
+  line-height: 1.45;
+}
+
+.app-modal-panel label {
+  display: block;
+  margin: 0.65rem 0 0.35rem;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--text-2);
+}
+
+.app-modal-panel label:first-of-type {
+  margin-top: 0;
+}
+
+.app-modal-panel input,
+.app-modal-panel textarea,
+.app-modal-panel select,
+.app-modal-select,
+.date-select,
+.time-input,
+.duration-select {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 10px 12px;
+  font-size: 16px;
+  line-height: 1.35;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border);
+  background: var(--surface-2-solid);
+  color: var(--text);
+  margin-bottom: 0.35rem;
+  font-family: inherit;
+}
+
+.app-modal-panel textarea {
+  min-height: 3.5rem;
+  max-height: min(200px, 28vh);
+  resize: vertical;
+}
+
+.app-modal-panel input:focus,
+.app-modal-panel textarea:focus,
+.app-modal-panel select:focus {
+  outline: none;
+  box-shadow: var(--ring);
+  border-color: color-mix(in srgb, var(--primary) 45%, var(--border));
+  background: var(--surface-solid);
+}
+
+.app-modal-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: flex-end;
+  margin-top: 1.15rem;
+  align-items: center;
+}
+
+.app-modal-btn {
+  appearance: none;
+  border-radius: var(--radius-sm);
+  padding: 10px 16px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  border: 1px solid transparent;
+  font-family: inherit;
+  transition: transform var(--dur-1) var(--ease-out), filter var(--dur-2) var(--ease-out);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  min-height: 44px;
+}
+
+.app-modal-btn:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.app-modal-btn--primary {
+  background: linear-gradient(135deg, var(--primary), var(--primary-2));
+  color: var(--on-primary);
+  border-color: rgba(255, 255, 255, 0.14);
+  box-shadow: var(--shadow);
+}
+
+.app-modal-btn--danger {
+  background: linear-gradient(135deg, var(--danger), color-mix(in srgb, var(--danger) 75%, #7f1d1d));
+  color: #fff;
+  border-color: rgba(255, 255, 255, 0.12);
+}
+
+.app-modal-btn--ghost {
+  background: color-mix(in srgb, var(--surface-2-solid) 90%, transparent);
+  color: var(--text);
+  border: 1px solid var(--border);
+}
+
+.app-modal-btn:hover:not(:disabled) {
+  transform: translateY(-1px);
+  filter: brightness(1.04);
+}
+
+.app-modal-btn--block {
+  width: 100%;
+}
+
+.app-modal-error,
+.error-message {
+  color: var(--danger);
+  font-size: 0.85rem;
+  margin: 0.5rem 0 0;
+}
+
+.app-modal-notice,
+.notice {
+  font-size: 0.8rem;
+  color: var(--muted);
+  font-style: italic;
+  margin: 0 0 0.65rem;
+}
+
+.app-modal-hint {
+  margin: 0.65rem 0;
+  color: var(--primary);
+  font-weight: 500;
+  font-size: 0.9rem;
+}
+
+/* Phones / narrow tablets: bottom sheet, full-width actions, safe areas */
+@media (max-width: 640px) {
+  .app-modal-overlay {
+    align-items: flex-end;
+    padding: 0;
+    padding-bottom: env(safe-area-inset-bottom, 0);
+  }
+
+  .app-modal-panel {
+    max-width: 100%;
+    width: 100%;
+    border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+    max-height: min(92dvh, calc(100dvh - env(safe-area-inset-top, 0px)));
+    padding: 0.65rem 1rem calc(1rem + env(safe-area-inset-bottom, 20px));
+    box-sizing: border-box;
+  }
+
+  /* Drag affordance for bottom sheet */
+  .app-modal-panel::before {
+    content: "";
+    display: block;
+    width: 36px;
+    height: 4px;
+    border-radius: 999px;
+    background: color-mix(in srgb, var(--text) 18%, var(--border));
+    margin: 0 auto 0.75rem;
+    flex-shrink: 0;
+  }
+
+  .app-modal-title {
+    font-size: 1.1rem;
+    padding-right: 0;
+  }
+
+  .app-modal-actions {
+    flex-direction: column-reverse;
+    align-items: stretch;
+    gap: 10px;
+    margin-top: 1rem;
+  }
+
+  .app-modal-actions .app-modal-btn {
+    width: 100%;
+  }
+}

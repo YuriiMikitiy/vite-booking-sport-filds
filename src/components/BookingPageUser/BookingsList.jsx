@@ -4,6 +4,7 @@ import BookingCard from "./BookingCard.jsx";
 
 export default function BookingsList({
   bookings,
+  tabEmptyMessage,
   deletingId,
   handleDeleteBooking,
   handleShowOnMap,
@@ -15,11 +16,11 @@ export default function BookingsList({
 
   return bookings.length === 0 ? (
     <div className="no-results-message">
-      <h3>{t.bookingsUser.noBookings}</h3>
-      <p>{t.bookingsUser.useSearch}</p>
+      <h3>{tabEmptyMessage ?? t.bookingsUser.noBookings}</h3>
+      {!tabEmptyMessage && <p>{t.bookingsUser.useSearch}</p>}
     </div>
   ) : (
-    <div style={{ marginBottom: "50px" }}>
+    <div className="bookings-list-stack">
       {bookings.map((booking) => (
         <BookingCard
           key={booking.id}

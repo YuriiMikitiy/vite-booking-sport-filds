@@ -1,36 +1,4 @@
-.modal-overlay {
-  position: fixed;
-  inset: 0;
-  padding: 24px;
-  background: color-mix(in srgb, var(--bg) 40%, black);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 1200;
-  animation: fadeIn 0.2s ease-in-out;
-}
-
-.modal-content {
-  background: color-mix(in srgb, var(--surface) 92%, transparent);
-  padding: 20px;
-  border-radius: 16px;
-  width: min(620px, calc(100vw - 48px));
-  max-height: calc(100vh - 48px);
-  overflow: auto;
-  box-shadow: var(--shadow);
-  border: 1px solid var(--border);
-  position: relative;
-  animation: slideUp 0.22s var(--ease-out) forwards;
-  color: var(--text);
-}
-
-.modal-title {
-  font-size: 1.25rem;
-  font-weight: 600;
-  color: var(--text);
-  margin: 0 0 14px;
-  text-align: left;
-}
+@import "../common/AppModal.css";
 
 .user-info-list {
   list-style: none;
@@ -91,7 +59,7 @@
   justify-content: center;
   align-items: center;
   margin: 14px 0 0 auto;
-  background: color-mix(in srgb, var(--surface) 80%, transparent);
+  background: color-mix(in srgb, var(--surface-2-solid) 88%, transparent);
   color: var(--text);
   border: 1px solid var(--border);
   padding: 10px 16px;
@@ -107,37 +75,7 @@
   background: var(--surface-2);
 }
 
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
-}
-
-@keyframes slideUp {
-  from {
-    transform: translateY(8px);
-    opacity: 0;
-  }
-  to {
-    transform: translateY(0);
-    opacity: 1;
-  }
-}
-
 @media (max-width: 640px) {
-  .modal-overlay {
-    padding: 12px;
-  }
-
-  .modal-content {
-    width: min(620px, calc(100vw - 24px));
-    max-height: calc(100vh - 24px);
-    padding: 14px;
-  }
-
   .user-info-item {
     gap: 8px;
     padding: 9px 10px;
@@ -154,5 +92,11 @@
 
   .action-btn {
     margin-left: 0;
+  }
+
+  .close-btn {
+    width: 100%;
+    margin-left: 0;
+    margin-top: 0.75rem;
   }
 }

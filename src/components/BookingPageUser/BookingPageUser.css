@@ -1,8 +1,9 @@
-html, body {
-  height: 100vh;
-  margin: 0;
-  overflow: hidden;
-  font-family: "Roboto", sans-serif;
+a.show-on-map-button-user {
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
 }
 
 .show-on-map-button-user,
@@ -112,6 +113,17 @@ html, body {
   animation: flow 1.5s linear infinite;
 }
 
+.cancel-button-my-book {
+  background: #ef4444;
+  color: white;
+  border: none;
+  padding: 10px 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  width: 208px;
+  margin-left: 24px;
+}
+
 .book-button-details {
   text-align: center;
   background-color: #e3e3e3c8;
@@ -205,15 +217,74 @@ html, body {
 .booking-page {
   display: flex;
   flex-direction: row;
-  height: 100vh;
+  align-items: stretch;
+  min-height: calc(100vh - 82px);
   overflow: hidden;
-  background-color: #55787e;
+  background-color: var(--bg);
+  color: var(--text);
+}
+
+@media (min-width: 901px) {
+  .booking-page {
+    height: calc(100vh - 82px);
+  }
+
+  .left-section {
+    min-height: 0;
+    height: auto;
+    align-self: stretch;
+  }
+
+  .right-section:not(.right-section--compact-map) {
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+    height: auto;
+    align-self: stretch;
+  }
+
+  .right-section:not(.right-section--compact-map) .map-view-container {
+    flex: 1 1 auto;
+    min-height: min(520px, calc(100vh - 120px));
+    height: 100%;
+  }
+}
+
+@media (max-width: 900px) {
+  .booking-page {
+    flex-direction: column;
+    overflow: visible;
+    height: auto;
+    min-height: auto;
+  }
+
+  .left-section {
+    height: auto;
+    overflow: visible;
+    padding-bottom: 16px;
+  }
+
+  .right-section {
+    width: 100%;
+    max-width: 100%;
+    flex: none;
+    height: auto;
+    position: relative;
+    top: auto;
+    border-left: none;
+  }
+
+  .right-section:not(.right-section--compact-map) {
+    min-height: 280px;
+    height: 42vh;
+    max-height: 520px;
+  }
 }
 
 .left-section {
   flex: 3;
   margin-top: 0;
-  padding: 16px 20px 0;
+  padding: 16px 20px 28px;
   height: 100%;
   overflow-y: auto;
   scrollbar-width: auto;
@@ -222,6 +293,9 @@ html, body {
   border-right: 1px solid var(--border);
   transition: background-color var(--dur-2) var(--ease-out), border-color var(--dur-2) var(--ease-out);
 }
+
+
+
 
 .left-section::-webkit-scrollbar {
   width: 10px;
@@ -284,133 +358,10 @@ html, body {
 .results-count {
   margin: 16px 0;
   font-size: 14px;
-  color: #fff;
+  color: var(--text-2);
 }
 
-.card-user {
-  background-color: #55787e;
-  position: relative;
-  border-radius: 20px;
-  flex-direction: row;
-  padding: 16px;
-  margin-bottom: 20px;
-  display: flex;
-  gap: 20px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  align-items: flex-start;
-  min-height: 280px;
-  height: auto;
-}
-
-.card-image-container {
-  flex-shrink: 0;
-  width: 326px;
-  height: 190px;
-  position: relative;
-}
-
-.image-badges {
-  position: absolute;
-  top: 8px;
-  left: 8px;
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-}
-
-.badge {
-  padding: 4px 10px;
-  border-radius: 12px;
-  color: white;
-  font-size: 12px;
-  font-weight: bold;
-  width: fit-content;
-}
-
-.badge.red {
-  background-color: #e53935;
-}
-
-.badge.yellow {
-  background-color: #fbc02d;
-  color: #000;
-}
-
-.card-image {
-  width: 100%;
-  height: 100%;
-  border-radius: 12px;
-  object-fit: cover;
-}
-
-.card-info {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  font-size: 14px;
-  gap: 8px;
-  color: #000;
-}
-
-.card-info h3 {
-  margin: 0;
-  font-size: 20px;
-  color: #333;
-}
-
-.tags {
-  display: flex;
-  gap: 8px;
-  flex-wrap: wrap;
-}
-
-.tag {
-  background-color: #f0f0f0;
-  border-radius: 14px;
-  padding: 4px 10px;
-  font-size: 13px;
-  font-weight: 500;
-}
-
-.alert {
-  font-size: 13px;
-  color: #d32f2f;
-  background-color: #fff3f3;
-  border-left: 4px solid #d32f2f;
-  padding: 8px 12px;
-  border-radius: 8px;
-}
-
-.fast-booking-note {
-  font-size: 14px;
-  background-color: #f3f3f3;
-  padding: 10px;
-  border-radius: 10px;
-  color: #333;
-  margin-top: 10px;
-}
-
-.book-button:hover {
-  background-color: #d0d0d0;
-}
-
-.book-button span {
-  margin-right: 12px;
-}
-
-.book-button.full {
-  background-color: #3d5afe;
-  color: white;
-  margin-top: 12px;
-  font-size: 16px;
-  font-weight: 600;
-  justify-content: center;
-  padding: 12px;
-}
-
-.book-button.full:hover {
-  background-color: #2a47c2;
-}
+/* Картки бронювань: ті самі класи, що й CourtCard (.court-card) + CourtCard.css */
 
 .pagination {
   display: flex;
@@ -445,20 +396,6 @@ html, body {
   .right-section {
     height: 400px;
     position: relative;
-  }
-
-  .card-user {
-    flex-direction: column;
-    align-items: center;
-  }
-
-  .card-image-container {
-    width: 100%;
-    height: 200px;
-  }
-
-  .card-info {
-    width: 100%;
   }
 }
 
@@ -472,386 +409,195 @@ html, body {
   }
 }
 
-
-/* html, body {
-  height: 100vh;
-  margin: 0;
-  overflow: hidden;
-  font-family: "Roboto", sans-serif;
-}
-
-.show-on-map-button-user {
-  background-color: #4caf50;
-  color: white;
-  border: none;
-  padding: 10px 14px;
-  border-radius: 12px;
-  cursor: pointer;
-  font-size: 14px;
-  transition: background-color 0.3s;
-  text-align: center;
-  align-items: center;
-}
-
-.show-on-map-button-user:hover {
-  background-color: #388e3c; 
-  transform: translateY(-1px);
-}
-
-
-.cancel-button {
-  padding: 10px 14px;
-  display: inline-flex;
-  align-items: center;
-  text-align: center;
-  justify-content: space-between;
-  background-color: #f44336;
-  color: white;
-  border: none;
-  border-radius: 12px;
-  font-size: 15px;
-  cursor: pointer;
-  font-weight: 600;
-  margin-right: 32px;
-  transition: background-color 0.3s ease;
-}
-
-.cancel-button:hover {
-  background-color: #d32f2f;
-  transform: translateY(-1px);
-}
-
-.cancel-button:disabled {
-  background-color: #cccccc;
-  cursor: not-allowed;
-  box-shadow: none;
-  transform: none;
-}
-
-.book-button-details {
-  text-align: center;
-  background-color: #e3e3e3c8;
-  padding: 10px 14px;
-  border-radius: 12px;
-  font-weight: 600;
-  font-size: 15px;
-  border: none;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-}
-
-.book-button-details:hover {
-  background-color: #f0f0f0; 
-  transform: translateY(-1px);
-}
-
-.booking-actions {
-  position: absolute;
-  left: 10px;
-  right: 0;
-  margin-top: 200px;
-  border-bottom-left-radius: 20px;
-  border-bottom-right-radius: 20px;
-  padding: 10px 16px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.cancel-button:hover {
-  background-color: #d32f2f;
-}
-
-.cancel-button:disabled {
-  background-color: #cccccc;
-  cursor: not-allowed;
-}
-
-.loading-indicator {
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  background: rgba(0, 0, 0, 0.7);
-  color: white;
-  padding: 20px 30px;
-  border-radius: 8px;
-  z-index: 1000;
-}
-
-.city-select {
-  border: none;
-  width: var(--select-width, 100px);
-  background: transparent;
-  font-weight: bold;
-  font-size: inherit;
-  color: inherit;
-  cursor: pointer;
-}
-
-.no-results-message {
-  text-align: center;
-  padding: 40px;
-  margin: 20px 0;
-  background-color: #f8f9fa;
-  border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-.no-results-message h3 {
-  color: #dc3545;
-  margin-bottom: 10px;
-}
-
-.no-results-message p {
-  color: #6c757d;
-}
-
-.booking-page {
-  display: flex;
-  flex-direction: row;
-  height: 100vh;
-  overflow: hidden;
-  background-color: #55787e;
-}
-
-.left-section {
-  flex: 3;
-  margin-top: 16px;
-  padding: 0 20px;
-  height: calc(100vh - 70px);
-  overflow-y: auto;
-  scrollbar-width: auto;
-  scrollbar-color: #55787e transparent;
-}
-
-.left-section::-webkit-scrollbar {
-  width: 10px;
-}
-
-.left-section::-webkit-scrollbar-track {
-  background: #e0e0e0;
-  border-radius: 4px;
-}
-
-.left-section::-webkit-scrollbar-thumb {
-  background-color: #55787e;
-  border-radius: 4px;
-}
-
-.right-section {
-  flex: 2;
-  height: 100vh;
-  position: sticky;
-  top: 0;
-}
-
-.leaflet-container {
-  height: 100%;
-  width: 100%;
-}
-
-.city-name {
-  font-size: 24px;
-  font-weight: bold;
-  margin-bottom: 12px;
-  color: #000;
-}
-
-.search-fields {
+/* Фільтр кнопки */
+.filter-container {
   display: flex;
   gap: 10px;
-  margin-bottom: 16px;
-  flex-wrap: wrap;
-}
-
-.search-input {
-  padding: 10px;
-  border: none;
-  border-radius: 8px;
-  width: 100%;
-  font-size: 18px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-}
-
-.results-count {
-  margin: 16px 0;
-  font-size: 14px;
-  color: #fff;
-}
-
-.card-user {
-  background-color: #55787e;
-  position: relative;
-  border-radius: 20px;
-  flex-direction: row;
-  padding: 16px;
   margin-bottom: 20px;
-  display: flex;
-  gap: 20px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  align-items: flex-start;
-  height: 280px;
-}
-
-.card-image-container {
-  flex-shrink: 0;
-  width: 326px;
-  height: 190px;
-  position: relative;
-}
-
-.image-badges {
-  position: absolute;
-  top: 8px;
-  left: 8px;
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-}
-
-.badge {
-  padding: 4px 10px;
-  border-radius: 12px;
-  color: white;
-  font-size: 12px;
-  font-weight: bold;
-  width: fit-content;
-}
-
-.badge.red {
-  background-color: #e53935;
-}
-
-.badge.yellow {
-  background-color: #fbc02d;
-  color: #000;
-}
-
-.card-image {
-  width: 100%;
-  height: 100%;
-  border-radius: 12px;
-  object-fit: cover;
-}
-
-.card-info {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  font-size: 14px;
-  gap: 8px;
-  color: #000;
-}
-
-.card-info h3 {
-  margin: 0;
-  font-size: 20px;
-  color: #333;
-}
-
-.tags {
-  display: flex;
-  gap: 8px;
   flex-wrap: wrap;
 }
 
-.tag {
-  background-color: #f0f0f0;
-  border-radius: 14px;
-  padding: 4px 10px;
-  font-size: 13px;
-  font-weight: 500;
+/* ==================== ФІЛЬТР КНОПКИ ==================== */
+/* ==================== ФІЛЬТР КНОПКИ ==================== */
+.filter-container {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
 }
 
-.alert {
-  font-size: 13px;
-  color: #d32f2f;
-  background-color: #fff3f3;
-  border-left: 4px solid #d32f2f;
-  padding: 8px 12px;
-  border-radius: 8px;
-}
-
-.fast-booking-note {
-  font-size: 14px;
-  background-color: #f3f3f3;
-  padding: 10px;
-  border-radius: 10px;
+.filter-btn {
+  padding: 11px 24px;
+  border: 2px solid #e0e0e0;
+  background-color: #f8f9fa;
   color: #333;
-  margin-top: 10px;
-}
-
-.book-button:hover {
-  background-color: #d0d0d0;
-}
-
-.book-button span {
-  margin-right: 12px;
-}
-
-.book-button.full {
-  background-color: #3d5afe;
-  color: white;
-  margin-top: 12px;
-  font-size: 16px;
+  border-radius: 9999px;
   font-weight: 600;
-  justify-content: center;
-  padding: 12px;
+  font-size: 15px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  min-width: 140px;
+  text-align: center;
 }
 
-.book-button.full:hover {
-  background-color: #2a47c2;
+.filter-btn:hover {
+  background-color: #f0f0f0;
+  border-color: #1976d2;
+}
+
+.filter-btn.active {
+  background-color: #1976d2;
+  color: white;
+  border-color: #1976d2;
+  box-shadow: 0 4px 14px rgba(25, 118, 210, 0.35);
+}
+
+/* ==================== ПАГІНАЦІЯ ==================== */
+/* ==================== ФІЛЬТР КНОПКИ (світла + темна тема) ==================== */
+.filter-container {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 24px;
+  flex-wrap: wrap;
+}
+
+.filter-btn {
+  padding: 11px 26px;
+  border: 2px solid #555;
+  background-color: #2c2c2c;
+  color: #ddd;
+  border-radius: 9999px;
+  font-weight: 600;
+  font-size: 15px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  min-width: 150px;
+  text-align: center;
+}
+
+.filter-btn:hover {
+  background-color: #3a3a3a;
+  border-color: #1976d2;
+  color: white;
+}
+
+.filter-btn.active {
+  background-color: #1976d2;
+  color: white;
+  border-color: #1976d2;
+  box-shadow: 0 4px 15px rgba(25, 118, 210, 0.5);
+}
+
+/* Світла тема */
+body:not(.dark) .filter-btn {
+  background-color: #f0f0f0;
+  color: #333;
+  border-color: #ddd;
+}
+
+body:not(.dark) .filter-btn:hover {
+  background-color: #e0e0e0;
+  border-color: #1976d2;
+}
+
+body:not(.dark) .filter-btn.active {
+  background-color: #1976d2;
+  color: white;
+  border-color: #1976d2;
+}
+
+/* Пагінація — у потоці документа, одразу під списком (без sticky) */
+.bookings-list-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.pagination-wrapper {
+  position: static;
+  flex-shrink: 0;
+  margin-top: 8px;
+  padding: 14px 0 4px;
+  border-radius: 0;
+  background: transparent;
+  border-top: 1px solid var(--border);
+  box-shadow: none;
+  z-index: auto;
+}
+
+body:not(.dark) .pagination-wrapper {
+  background: transparent;
+  border-top: 1px solid var(--border);
+  box-shadow: none;
+}
+
+.pagination-wrapper .pagination {
+  margin-top: 0;
+  margin-bottom: 0;
 }
 
 .pagination {
   display: flex;
-  gap: 8px;
   justify-content: center;
-  margin-top: 20px;
-  margin-bottom: 120px;
+  gap: 8px;
+  flex-wrap: wrap;
 }
 
 .pagination button {
-  padding: 8px 12px;
-  border-radius: 6px;
-  border: none;
-  background-color: #ccc;
+  min-width: 42px;
+  height: 42px;
+  padding: 8px 14px;
+  border: 1px solid #555;
+  background-color: #2c2c2c;
+  color: #ddd;
+  border-radius: 10px;
   cursor: pointer;
+  font-size: 15px;
+  font-weight: 500;
+  transition: all 0.2s;
 }
 
-.pagination .active {
-  background-color: #4f8bfc;
-  color: #fff;
+body:not(.dark) .pagination button {
+  background-color: white;
+  color: #333;
+  border-color: #ddd;
 }
 
-.pagination button:hover {
-  background-color: #aaa;
+.pagination button:hover:not(:disabled) {
+  background-color: #1976d2;
+  color: white;
+  border-color: #1976d2;
 }
 
-@media (max-width: 768px) {
-  .booking-page {
+.pagination button.active {
+  background-color: #1976d2;
+  color: white;
+  border-color: #1976d2;
+}
+
+.pagination button:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+@media (max-width: 640px) {
+  .booking-actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .show-on-map-button-user,
+  .cancel-button-my-book,
+  .book-button-details {
+    width: 100%;
+    margin-left: 0 !important;
+  }
+
+  .filter-container {
     flex-direction: column;
   }
 
-  .right-section {
-    height: 400px;
-    position: relative;
-  }
-
-  .card-user {
-    flex-direction: column;
-    align-items: center;
-  }
-
-  .card-image-container {
-    width: 100%;
-    height: 200px;
-  }
-
-  .card-info {
+  .filter-btn {
     width: 100%;
   }
 }
-
- */

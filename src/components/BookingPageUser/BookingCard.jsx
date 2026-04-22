@@ -1,8 +1,10 @@
 import React from "react";
-import { getCorrectType } from "../BookingPage/BookingPage.jsx";
+import { getCorrectType } from "../../utils/sportFieldType.js";
 import { useContext, useState } from "react";
 import { LanguageContext } from "../../assets/LanguageContext";
 import ReviewForm from "../BookingPage/componentsBookingPage/ReviewForm.jsx";
+import NativeMapLink from "../common/NativeMapLink.jsx";
+import "../BookingPage/componentsBookingPage/CourtCard/CourtCard.css";
 
 export default function BookingCard({
   booking,
@@ -35,24 +37,29 @@ const [showReview, setShowReview] = useState(false);
     return t.sports[translationKey] || sportInfo.key;
   };
 
-const correctStatus = (type) => {
-  switch (type) {
+function bookingStatusLabel(raw, t) {
+  const n = Number(raw);
+  if (raw === null || raw === undefined || Number.isNaN(n)) return t.bookingsUser.statusUnknown;
+  switch (n) {
     case 1:
-      return "Очікує підтвердження";
+      return t.bookingsUser.statusPending;
     case 2:
-      return "Підтверджено";
+      return t.bookingsUser.statusConfirmed;
     case 3:
-      return "Скасовано";
+      return t.bookingsUser.statusCancelled;
     default:
-      break;
+      return t.bookingsUser.statusUnknown;
   }
 }
-const status = Number(booking.status);
-const canReview = status === 1 || status === 2;
+
+const statusNum = Number(booking.status);
 const isPastBooking = new Date(booking.endTime) < new Date();
+/** Відгук після завершення слоту: очікує / підтверджено (1–2), не скасовано (3) */
+const canLeaveReview =
+  isPastBooking && (statusNum === 1 || statusNum === 2);
 
   return (
-    <div className="card-user">
+    <div className="court-card">
       <div className="card-image-container">
         <img
           src={
@@ -62,8 +69,8 @@ const isPastBooking = new Date(booking.endTime) < new Date();
           className="card-image"
         />
         <div className="image-badges">
-          <span className="badge">
-            Статус: {correctStatus(booking.status) }
+          <span className="badge badge--plain">
+            Статус: {bookingStatusLabel(booking.status, t)}
           </span>
         </div>
       </div>
@@ -76,7 +83,6 @@ const isPastBooking = new Date(booking.endTime) < new Date();
         </p>
         <p>Ціна: {booking.totalPrice} грн</p>
         <div className="tags">
-          {console.log("BOOKING:", booking.sportsField)}
   {booking.sportsField.types?.map((sportType, index) => {
     const sportInfo = getCorrectType(sportType.type);
     return (
@@ -95,23 +101,26 @@ const isPastBooking = new Date(booking.endTime) < new Date();
         
         
         <div className="booking-actions">
-          <button
+          <NativeMapLink
+            lat={booking.sportsField?.location?.latitude}
+            lng={booking.sportsField?.location?.longitude}
+            label={booking.sportsField?.title}
             className="show-on-map-button-user"
-            onClick={() => handleShowOnMap(booking)}
+            onDesktopAction={() => handleShowOnMap(booking)}
           >
-            Показати на карті
-          </button>
+            {t.courtCard.showOnMap}
+          </NativeMapLink>
           <button
             className="cancel-button-my-book"
             style={{ marginLeft: "1rem" }}
             onClick={() => handleDeleteBooking(booking.id)}
             disabled={deletingId === booking.id || isPastBooking}
-            title={isPastBooking ? "Бронювання вже завершене" : ""}
+            title={isPastBooking ? t.bookingsUser.cancelDisabledPastTitle : ""}
           >
             {deletingId === booking.id
               ? "Скасування..."
               : isPastBooking
-                ? "Бронювання завершено"
+                ? t.bookingsUser.cancelDisabledPast
                 : "Скасувати бронювання"}
           </button>
           <button
@@ -120,7 +129,7 @@ const isPastBooking = new Date(booking.endTime) < new Date();
           >
             Деталі бронювання
           </button>
-          {canReview && (
+          {canLeaveReview && (
             <button
               className="book-button-details"
               onClick={() => setShowReview((prev) => !prev)}
@@ -129,7 +138,7 @@ const isPastBooking = new Date(booking.endTime) < new Date();
             </button>
           )}
         </div>
-        {showReview && (
+        {showReview && canLeaveReview && (
           <ReviewForm
             sportsFieldId={booking.sportsField.id}
             bookingId={booking.id}

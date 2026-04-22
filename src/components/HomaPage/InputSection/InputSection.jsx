@@ -6,10 +6,7 @@ import CustomDropdown from "./CustomDropdown.jsx";
 import { timeOptions, durationOptions, sports } from "./dateTime.js";
 import { useNavigate } from "react-router-dom";
 import { useContext } from "react";
-// Приклад з Header.jsx (якщо Header лежить у src/components/Header/)
-// Якщо файл лежить у src/contexts/LanguageContext.jsx
 import { LanguageContext } from "../../../assets/LanguageContext.jsx";
-
 
 export default function InputSection() {
   const [isOpen, setIsOpen] = useState(false);
@@ -20,8 +17,9 @@ export default function InputSection() {
 
   const navigate = useNavigate();
 
-  const { language, setLanguage, translations } = useContext(LanguageContext);
+  const { language, translations } = useContext(LanguageContext);
   const t = translations[language];
+
   const handleTimeSelect = (value) => {
     console.log("Обраний час:", value);
   };
@@ -31,37 +29,32 @@ export default function InputSection() {
   };
 
   return (
-    <div style={{ display: "flex" }}>
-      <div className="inputSection">
-        <div style={{ display: "flex", gap: "44px" }}>
-          {/* ------------------------------------------------------ */}
+    <section className="home-search" aria-label={t.inputSection.searchPlaceholder}>
+      <div className="home-search__row home-search__row--primary">
+        <div className="home-search__field home-search__field--sport">
           <div className="select-container">
             <div
-              style={{
-                display: "flex",
-                justifyContent: "space-between",
-                alignItems: "center",
-                position: "relative", // Додаємо для позиціонування стрілки
-                paddingRight: "20px", // Забезпечуємо місце для стрілки
-                width: "100%", // Займає всю доступну ширину
-              }}
               className="select-box"
               onClick={() => setIsOpen(!isOpen)}
+              onKeyDown={(e) => {
+                if (e.key === "Enter" || e.key === " ") {
+                  e.preventDefault();
+                  setIsOpen(!isOpen);
+                }
+              }}
+              role="button"
+              tabIndex={0}
+              aria-expanded={isOpen}
             >
-              <div style={{ display: "flex", alignItems: "center" }}>
+              <div className="home-search__sport-inner">
                 <img
                   src={selectedSport.icon}
-                  alt={selectedSport.name}
+                  alt=""
                   className="selected-icon"
                 />
-                <span>{selectedSport.name}</span>
+                <span className="selected-sport-value">{selectedSport.name}</span>
               </div>
-              <span
-                style={{
-                  position: "absolute",
-                  right: "20px", // Фіксуємо стрілку 20px від правого краю
-                }}
-              >
+              <span className="select-box-arrow" aria-hidden>
                 ▼
               </span>
             </div>
@@ -75,7 +68,7 @@ export default function InputSection() {
                   setIsOpen(false);
                 }}
               >
-                <img src="/src/assets/images/ManySport.png" alt="ManySport" />
+                <img src="/src/assets/images/ManySport.png" alt="" />
                 All kinds of sport
               </li>
               {sports.map((sport, index) => (
@@ -86,58 +79,69 @@ export default function InputSection() {
                     setIsOpen(false);
                   }}
                 >
-                  <img src={sport.icon} alt={sport.name} /> {sport.name}
+                  <img src={sport.icon} alt="" /> {sport.name}
                 </li>
               ))}
             </ul>
           </div>
-          {/* ------------------------------------------------------ */}
-          <div className="select-container2">
-            <div className="find-box">
-              <img
-                src="https://cdn0.iconfinder.com/data/icons/multimedia-solid-30px/30/search-128.png"
-                alt="Search"
-                className="search-icon"
-              />
-              <input
-                placeholder={t.inputSection.searchPlaceholder}
-                className="search-input"
-                type="text"
-              />
-            </div>
-          </div>
         </div>
-        <div style={{ display: "flex", gap: "26px" }}>
-          <div className="select-container-date">
+
+        <div className="home-search__field home-search__field--search">
+          <div className="find-box">
+            <img
+              src="https://cdn0.iconfinder.com/data/icons/multimedia-solid-30px/30/search-128.png"
+              alt=""
+              className="search-icon"
+            />
             <input
-              type="date"
-              className="date-input"
-              placeholder="Select date"
+              placeholder={t.inputSection.searchPlaceholder}
+              className="search-input"
+              type="search"
+              enterKeyHint="search"
             />
           </div>
-          {/* ------------------------------------------------------ */}
+        </div>
+      </div>
 
-          {/* ------------------------------------------------------ */}
+      <div className="home-search__row home-search__row--secondary">
+        <div className="home-search__field home-search__field--date">
+          <div className="select-container-date">
+            <input type="date" className="date-input" />
+          </div>
+        </div>
 
+        <div className="home-search__field home-search__field--time">
           <CustomDropdown
             options={timeOptions}
             placeholder="Оберіть час"
             onSelect={handleTimeSelect}
           />
+        </div>
+
+        <div className="home-search__field home-search__field--duration">
           <CustomDropdown
             options={durationOptions}
             placeholder="Оберіть тривалість"
             onSelect={handleDurationSelect}
           />
+        </div>
+
+        <div className="home-search__field home-search__field--submit">
           <div className="search-wrapper">
-            <button onClick={() => navigate("/booking")} className="search-btn">
+            <button
+              type="button"
+              onClick={() => navigate("/booking")}
+              className="search-btn"
+            >
               {t.inputSection.searchBtn}
             </button>
 
-            <div className="search-hint" role="note" aria-label="Підказка для пошуку">
-              <div className="search-hint-bubble">
-                {t.inputSection.searchHint}
-              </div>
+            <div
+              className="search-hint"
+              role="note"
+              aria-label={t.inputSection.searchHint}
+            >
+              <div className="search-hint-bubble">{t.inputSection.searchHint}</div>
               <svg
                 className="search-hint-arrow"
                 viewBox="0 0 120 60"
@@ -161,15 +165,9 @@ export default function InputSection() {
                 />
               </svg>
             </div>
-</div>
+          </div>
         </div>
       </div>
-      <img
-        style={{ with: "292px", height: "458px" }}
-        className="h-10 w-10"
-        src="/src/assets/images/2sport-children.png"
-        alt="2sport-children"
-      />
-    </div>
+    </section>
   );
 }

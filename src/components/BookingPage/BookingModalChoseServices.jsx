@@ -2,11 +2,30 @@ import React, { useEffect, useRef, useState, useContext } from "react";
 import { LanguageContext } from "../../assets/LanguageContext"; // Переконайся, що шлях правильний
 import "./BookingModalconfirmation.css";
 import axios from "axios";
+import { useModalBodyLock } from "../../hooks/useModalBodyLock.js";
+import { API_BASE } from "../../config/api.js";
+
+/** Локальний календарний YYYY-MM-DD (toISOString() дає UTC і ламає день біля півночі) */
+function formatLocalYmd(d) {
+  const y = d.getFullYear();
+  const m = String(d.getMonth() + 1).padStart(2, "0");
+  const day = String(d.getDate()).padStart(2, "0");
+  return `${y}-${m}-${day}`;
+}
+
+/** API повертає ISO із Z; для користувача показуємо той самий "wall clock" час як у слоті */
+function formatSlotTime(iso, language) {
+  return new Date(iso).toLocaleTimeString(
+    language === "uk" ? "uk-UA" : language === "pl" ? "pl-PL" : "en-GB",
+    { hour: "2-digit", minute: "2-digit", hour12: false, timeZone: "UTC" }
+  );
+}
 
 export default function BookingModalChooseServices({ court, onClose, onConfirm }) {
   const { language, translations } = useContext(LanguageContext);
   const t = translations[language];
   const modalRef = useRef();
+  useModalBodyLock(true);
 
   const [date, setDate] = useState("");
   const [selectedSportType, setSelectedSportType] = useState(null);
@@ -60,17 +79,38 @@ export default function BookingModalChooseServices({ court, onClose, onConfirm }
     setSlotsLoading(true);
     setError("");
 
-    let url = `https://localhost:44313/api/Booking/available-slots/${court.id}/${date}/${selectedSportType.type}`;
+    let url = `${API_BASE}/Booking/available-slots/${court.id}/${date}/${selectedSportType.type}`;
     if (selectedInstance?.id) {
       url += `/${selectedInstance.id}`;
     }
 
     try {
+      console.groupCollapsed("[Booking] available-slots request");
+      console.log("courtId:", court.id);
+      console.log("date:", date);
+      console.log("sportType:", selectedSportType.type);
+      console.log("instanceId:", selectedInstance?.id ?? null);
+      console.log("url:", url);
       const response = await axios.get(url);
-      const now = new Date();
-      const future = response.data.filter(slot => new Date(slot.startTime) > now);
-      setAvailableSlots(future);
+      const rows = Array.isArray(response.data) ? response.data : [];
+      const todayLocal = formatLocalYmd(new Date());
+      const isBookingToday = date === todayLocal;
+      /* Минуле відсікаємо лише для «сьогодні»; для майбутніх днів показуємо всі слоти з API */
+      const list = isBookingToday
+        ? rows.filter((slot) => new Date(slot.startTime) > new Date())
+        : rows;
+      console.log("response status:", response.status);
+      console.log("slots from API:", rows);
+      console.log("slots after client filter:", list);
+      console.groupEnd();
+      setAvailableSlots(list);
     } catch (err) {
+      console.groupCollapsed("[Booking] available-slots error");
+      console.log("url:", url);
+      console.log("status:", err.response?.status);
+      console.log("response:", err.response?.data);
+      console.error(err);
+      console.groupEnd();
       if (err.response?.status === 404) {
         setError(t.bookingModal.noSlots);
       } else {
@@ -85,6 +125,23 @@ export default function BookingModalChooseServices({ court, onClose, onConfirm }
     fetchAvailableSlots();
   }, [date, selectedSportType?.type, selectedInstance?.id]);
 
+  useEffect(() => {
+    function handleClickOutside(event) {
+      if (modalRef.current && !modalRef.current.contains(event.target)) {
+        onClose();
+      }
+    }
+    function handleEscape(event) {
+      if (event.key === "Escape") onClose();
+    }
+    document.addEventListener("mousedown", handleClickOutside);
+    document.addEventListener("keydown", handleEscape);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+      document.removeEventListener("keydown", handleEscape);
+    };
+  }, [onClose]);
+
   const availableBlocks = React.useMemo(() => {
     if (!availableSlots.length) return [];
 
@@ -97,8 +154,8 @@ export default function BookingModalChooseServices({ court, onClose, onConfirm }
       const end = new Date(slot.endTime);
 
       if (end.getTime() - start.getTime() === 60 * 60 * 1000) {
-        const startStr = start.toLocaleTimeString(language === 'uk' ? 'uk-UA' : 'en-GB', { hour: "2-digit", minute: "2-digit" });
-        const endStr = end.toLocaleTimeString(language === 'uk' ? 'uk-UA' : 'en-GB', { hour: "2-digit", minute: "2-digit" });
+        const startStr = formatSlotTime(slot.startTime, language);
+        const endStr = formatSlotTime(slot.endTime, language);
 
         blocks.push({
           start: startStr,
@@ -133,7 +190,7 @@ export default function BookingModalChooseServices({ court, onClose, onConfirm }
       };
 
       const res = await axios.post(
-        "https://localhost:44313/api/Booking/check-availability",
+        `${API_BASE}/Booking/check-availability`,
         requestData
       );
 
@@ -146,6 +203,8 @@ export default function BookingModalChooseServices({ court, onClose, onConfirm }
           instanceId: selectedInstance?.id || null,
           date,
           time: selectedBlock.start,
+          /** Точний час з API (UTC); не збирати з date + time — інакше зламається часовий пояс */
+          startTimeUtc: selectedBlock.startFull,
           duration: 1,
           totalPrice: selectedSportType.pricePerHour,
           endTime: selectedBlock.end,
@@ -166,16 +225,16 @@ export default function BookingModalChooseServices({ court, onClose, onConfirm }
       d.setDate(d.getDate() + i);
       days.push({
         label: d.toLocaleDateString(language === 'uk' ? "uk-UA" : (language === 'pl' ? "pl-PL" : "en-GB"), { weekday: "long", day: "numeric", month: "long" }),
-        value: d.toISOString().split("T")[0]
+        value: formatLocalYmd(d),
       });
     }
     return days;
   };
 
   return (
-    <div className="modal-overlay">
-      <div className="modal-content" ref={modalRef}>
-        <h2>{t.bookingModal.bookTitle}: {court.title || court.name}</h2>
+    <div className="app-modal-overlay">
+      <div className="app-modal-panel" ref={modalRef}>
+        <h2 className="app-modal-title">{t.bookingModal.bookTitle}: {court.title || court.name}</h2>
 
         <form onSubmit={handleSubmit}>
           <label>{t.bookingModal.chooseSport}</label>
@@ -222,7 +281,7 @@ export default function BookingModalChooseServices({ court, onClose, onConfirm }
                 </select>
               </>
             ) : instances.length === 1 && selectedInstance ? (
-              <p style={{ margin: "12px 0", color: "#2c7be5", fontWeight: 500 }}>
+              <p className="app-modal-hint">
                 {selectedInstance.displayName}
               </p>
             ) : null
@@ -239,8 +298,10 @@ export default function BookingModalChooseServices({ court, onClose, onConfirm }
           <label>{t.bookingModal.timeLabel}</label>
           <select
             className="time-input"
-            value={selectedBlock?.start || ""}
-            onChange={(e) => setSelectedBlock(availableBlocks.find(b => b.start === e.target.value))}
+            value={selectedBlock?.startFull || ""}
+            onChange={(e) =>
+              setSelectedBlock(availableBlocks.find((b) => b.startFull === e.target.value))
+            }
             required
             disabled={slotsLoading || !date || !selectedSportType}
           >
@@ -248,21 +309,23 @@ export default function BookingModalChooseServices({ court, onClose, onConfirm }
               {slotsLoading ? t.common.loading : t.bookingModal.chooseTimePlaceholder}
             </option>
             {availableBlocks.map((b, i) => (
-              <option key={i} value={b.start}>{b.label}</option>
+              <option key={i} value={b.startFull}>
+                {b.label}
+              </option>
             ))}
           </select>
 
-          {error && <p className="error-message" style={{ color: 'red', marginTop: '12px' }}>{error}</p>}
+          {error && <p className="error-message">{error}</p>}
 
-          <div className="modal-buttons">
+          <div className="app-modal-actions">
             <button
               type="submit"
-              className="submit-button"
+              className="app-modal-btn app-modal-btn--primary"
               disabled={slotsLoading || !selectedBlock || (instances.length > 1 && !selectedInstance)}
             >
               {t.bookingModal.confirmBooking}
             </button>
-            <button type="button" className="cancel-button" onClick={onClose}>{t.bookingModal.cancel}</button>
+            <button type="button" className="app-modal-btn app-modal-btn--danger" onClick={onClose}>{t.bookingModal.cancel}</button>
           </div>
         </form>
       </div>

@@ -259,15 +259,20 @@
 
 import React, { useEffect, useRef, useState, useContext } from "react";
 import { LanguageContext } from "../../assets/LanguageContext";
+import { useToast } from "../../context/ToastContext.jsx";
 import "./BookingModalconfirmation.css";
 import axios from "axios";
 import { sports } from "../HomaPage/InputSection/dateTime";
+import { useModalBodyLock } from "../../hooks/useModalBodyLock.js";
+import { API_BASE } from "../../config/api.js";
 
 export default function BookingModalconfirmation({ court, bookingInfo, onClose }) {
   const { language, translations } = useContext(LanguageContext);
   const t = translations[language];
+  const { showToast } = useToast();
 
   const modalRef = useRef();
+  useModalBodyLock(true);
   const [phone, setPhone] = useState("+380");
   const [name, setName] = useState("");
   const [comment, setComment] = useState("");
@@ -295,7 +300,7 @@ export default function BookingModalconfirmation({ court, bookingInfo, onClose }
     async function fetchBookedSlots() {
       try {
         const response = await axios.get(
-          `https://localhost:44313/api/Booking/available-slots/${court.id}/${bookingInfo.date}/${bookingInfo.sportType}`
+          `${API_BASE}/Booking/available-slots/${court.id}/${bookingInfo.date}/${bookingInfo.sportType}`
         );
         setBookedSlots(response.data || []);
       } catch (err) {
@@ -313,68 +318,100 @@ export default function BookingModalconfirmation({ court, bookingInfo, onClose }
         onClose();
       }
     }
+    function handleEscape(event) {
+      if (event.key === "Escape") onClose();
+    }
     document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
+    document.addEventListener("keydown", handleEscape);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+      document.removeEventListener("keydown", handleEscape);
+    };
   }, [onClose]);
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
-    setIsSubmitting(true);
-    setError(null);
+  e.preventDefault();
+  setIsSubmitting(true);
+  setError(null);
 
-    try {
-      if (!isLoggedIn) {
-        if (!phone.startsWith("+380") || phone.length !== 13) {
-          throw new Error(t.bookingModal.guestPhoneError);
-        }
-        if (!name.trim()) {
-          throw new Error(t.bookingModal.guestNameError);
-        }
+  try {
+    // Валідація для гостя
+    if (!isLoggedIn) {
+      if (!phone.startsWith("+380") || phone.length !== 13) {
+        throw new Error(t.bookingModal.guestPhoneError || "Телефон повинен починатися з +380 і мати 13 символів");
       }
+      if (!name.trim()) {
+        throw new Error(t.bookingModal.guestNameError || "Ім'я обов'язкове");
+      }
+    }
 
-      const startTime = new Date(`${bookingInfo.date}T${bookingInfo.time}:00Z`);
-      if (isNaN(startTime.getTime())) throw new Error(t.common.error);
+    const startTime = bookingInfo.startTimeUtc
+      ? new Date(bookingInfo.startTimeUtc)
+      : new Date(`${bookingInfo.date}T${bookingInfo.time}:00Z`);
+    if (isNaN(startTime.getTime())) {
+      throw new Error(t.common.error || "Некоректна дата або час");
+    }
+    const startTimeIso = startTime.toISOString();
 
-      const bookingData = isLoggedIn
-        ? {
-            sportFieldId: court.id,
-            comment: comment || null,
-            sportType: Number(bookingInfo.sportType),
-            startTime: startTime.toISOString(),
-            durationMinutes: bookingInfo.duration * 60,
-            totalPrice: bookingInfo.totalPrice,
-            userId: userId,
-            sportsFieldInstanceId: bookingInfo.instanceId
-          }
-        : {
-            sportFieldId: court.id,
-            comment: comment || null,
-            sportType: Number(bookingInfo.sportType),
-            startTime: startTime.toISOString(),
-            durationMinutes: bookingInfo.duration * 60,
-            totalPrice: bookingInfo.totalPrice,
-            fullName: name.trim(),
-            phoneNumber: phone,
-            sportsFieldInstanceId: bookingInfo.instanceId
-          };
+    // Формуємо дані для відправки
+    const bookingData = isLoggedIn
+      ? {
+          sportFieldId: court.id,
+          comment: comment?.trim() || null,
+          sportType: Number(bookingInfo.sportType),
+          startTime: startTimeIso,
+          durationMinutes: bookingInfo.duration * 60,
+          totalPrice: bookingInfo.totalPrice,
+          userId: userId,
+          sportsFieldInstanceId: bookingInfo.instanceId || null
+        }
+      : {
+          sportFieldId: court.id,
+          comment: comment?.trim() || null,
+          sportType: Number(bookingInfo.sportType),
+          startTime: startTimeIso,
+          durationMinutes: bookingInfo.duration * 60,
+          totalPrice: bookingInfo.totalPrice,
+          fullName: name.trim(),
+          phoneNumber: phone,
+          sportsFieldInstanceId: bookingInfo.instanceId || null
+        };
 
       const endpoint = isLoggedIn
-        ? "https://localhost:44313/api/Booking/bookings"
-        : "https://localhost:44313/api/Booking/bookings/guest";
+      ? `${API_BASE}/Booking/bookings`
+      : `${API_BASE}/Booking/bookings/guest`;
 
-      await axios.post(endpoint, bookingData);
+    console.log("Відправляємо бронювання:", bookingData); // для діагностики
+
+    await axios.post(endpoint, bookingData);
+
+    const successMsg =
+      t.bookingModal.success || "Бронювання успішно створено!";
+    showToast(successMsg, "success");
+    /* Спочатку показуємо тост по центру, потім закриваємо модалку — інакше оновлення дерева могло «з’їдати» повідомлення */
+    window.setTimeout(() => {
       onClose();
-    } catch (err) {
-      setError(err.message || t.common.error);
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
+    }, 500);
 
+  } catch (err) {
+    console.error("Помилка бронювання:", err.response?.data || err);
+
+    const errorMessage = 
+      err.response?.data?.message || 
+      err.response?.data?.title || 
+      err.message || 
+      t.common.error || 
+      "Сталася помилка при бронюванні";
+
+    setError(errorMessage);
+  } finally {
+    setIsSubmitting(false);
+  }
+};
   return (
-    <div className="modal-overlay">
-      <div className="modal-content" ref={modalRef}>
-        <h2>{t.bookingModal.confirmationTitle}</h2>
+    <div className="app-modal-overlay">
+      <div className="app-modal-panel" ref={modalRef}>
+        <h2 className="app-modal-title">{t.bookingModal.confirmationTitle}</h2>
         <h3>{bookingInfo.court || bookingInfo.title}</h3>
         <p>{t.bookingModal.location} {bookingInfo.location?.address || bookingInfo.location}</p>
         <p>{t.bookingModal.sportType} {getCorrectType(bookingInfo.sportType)?.name}</p>
@@ -392,18 +429,18 @@ export default function BookingModalconfirmation({ court, bookingInfo, onClose }
           )}
 
           <label>{t.bookingModal.commentOptional}</label>
-          <textarea value={comment} onChange={(e) => setComment(e.target.value)} style={{ height: '64px' }} />
+          <textarea value={comment} onChange={(e) => setComment(e.target.value)} rows={3} />
 
           <p>{t.bookingModal.costLabel} {bookingInfo.totalPrice} грн</p>
           <p className="notice">{t.bookingModal.notice}</p>
 
           {error && <p className="error-message">{error}</p>}
 
-          <div className="modal-buttons">
-            <button type="submit" className="submit-button" disabled={isSubmitting}>
+          <div className="app-modal-actions">
+            <button type="submit" className="app-modal-btn app-modal-btn--primary" disabled={isSubmitting}>
               {isSubmitting ? t.bookingModal.processing : t.bookingModal.submit}
             </button>
-            <button type="button" className="cancel-button" onClick={onClose}>
+            <button type="button" className="app-modal-btn app-modal-btn--danger" onClick={onClose}>
               {t.bookingModal.cancel}
             </button>
           </div>

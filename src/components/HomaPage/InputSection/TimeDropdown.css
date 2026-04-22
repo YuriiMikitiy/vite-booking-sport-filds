@@ -59,6 +59,7 @@
     padding: 8px 10px;
     cursor: pointer;
     font-size: 14px;
+    color: var(--text);
   }
   
   .select-dropdown-time-at li:hover {

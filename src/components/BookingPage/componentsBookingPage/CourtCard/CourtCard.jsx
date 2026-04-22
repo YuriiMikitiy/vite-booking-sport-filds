@@ -125,7 +125,8 @@
 
 import React, { useContext } from "react";
 import { LanguageContext } from "../../../../assets/LanguageContext";
-import { getCorrectType } from "../../BookingPage";
+import { getCorrectType } from "../../../../utils/sportFieldType.js";
+import NativeMapLink from "../../../common/NativeMapLink.jsx";
 
 const CourtCard = ({ courts, setSelectedCourt, handleShowOnMap }) => {
   const { language, translations } = useContext(LanguageContext);
@@ -183,7 +184,7 @@ const CourtCard = ({ courts, setSelectedCourt, handleShowOnMap }) => {
   return (
     <div style={{ marginBottom: "50px" }}>
       {courts.map((court) => (
-        <div className="card" key={court.id}>
+        <div className="court-card" key={court.id}>
           <div className="card-image-container">
             <img
               src={court.imageUrl || "/src/assets/images/default-image-for-sport-field.jpg"}
@@ -247,35 +248,41 @@ const CourtCard = ({ courts, setSelectedCourt, handleShowOnMap }) => {
 
             <p className="description">{t.courtCard.bookFast}</p>
 
-            <div style={{ 
-              display: "flex", 
-              justifyContent: "space-between", 
-              alignItems: "center", 
-              marginTop: "16px" 
-            }}>
+            <div className="court-card-actions">
               <button
+                type="button"
                 className="book-button highlight"
                 onClick={() => setSelectedCourt(court)}
               >
-                {t.courtCard.bookButton.split('→')[0]} → 
-                <div style={{ 
-                  backgroundColor: "#1976d2", 
-                  padding: "8px 14px", 
-                  borderRadius: "15px", 
-                  display: "inline-block", 
-                  color: "white",
-                  fontWeight: "600"
-                }}>
+                {t.courtCard.bookButton.split("→")[0]} →
+                <div
+                  style={{
+                    backgroundColor: "#1976d2",
+                    padding: "8px 14px",
+                    borderRadius: "15px",
+                    display: "inline-block",
+                    color: "white",
+                    fontWeight: "600",
+                  }}
+                >
                   {t.courtCard.book}
                 </div>
               </button>
 
-              <button
+              <NativeMapLink
+                lat={court.location?.latitude}
+                lng={court.location?.longitude}
+                label={court.title}
                 className="show-on-map-button"
-                onClick={() => handleShowOnMap([court.location?.latitude, court.location?.longitude])}
+                onDesktopAction={() =>
+                  handleShowOnMap([
+                    court.location?.latitude,
+                    court.location?.longitude,
+                  ])
+                }
               >
                 {t.courtCard.showOnMap}
-              </button>
+              </NativeMapLink>
             </div>
           </div>
         </div>

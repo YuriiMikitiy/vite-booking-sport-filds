@@ -1,6 +1,7 @@
 import React, { useEffect, useRef } from "react";
 import "../BookingPage/BookingModalconfirmation.css";
 import { sports } from "../HomaPage/InputSection/dateTime";
+import { useModalBodyLock } from "../../hooks/useModalBodyLock.js";
 
 function getCorrectType(type) {
   return sports[type] ?? { name: "Unknown", icon: "" };
@@ -8,6 +9,7 @@ function getCorrectType(type) {
 
 export default function BookingModalconfirmation({ court, bookingInfo, onClose }) {
   const modalRef = useRef();
+  useModalBodyLock(true);
 
   useEffect(() => {
     function handleClickOutside(event) {
@@ -15,10 +17,15 @@ export default function BookingModalconfirmation({ court, bookingInfo, onClose }
         onClose();
       }
     }
+    function handleEscape(event) {
+      if (event.key === "Escape") onClose();
+    }
 
     document.addEventListener("mousedown", handleClickOutside);
+    document.addEventListener("keydown", handleEscape);
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
+      document.removeEventListener("keydown", handleEscape);
     };
   }, [onClose]);
 
@@ -29,9 +36,9 @@ export default function BookingModalconfirmation({ court, bookingInfo, onClose }
   console.log("details:", bookingInfo)
 
   return (
-    <div className="modal-overlay">
-      <div className="modal-content" ref={modalRef}>
-        <h2>Підтвердження бронювання</h2>
+    <div className="app-modal-overlay">
+      <div className="app-modal-panel" ref={modalRef}>
+        <h2 className="app-modal-title">Підтвердження бронювання</h2>
         <h3>{bookingInfo.court || bookingInfo.title}</h3>
         <p><strong>Локація:</strong> {bookingInfo.sportsField.location?.address || bookingInfo.location}</p>
         <p>
@@ -48,8 +55,8 @@ export default function BookingModalconfirmation({ court, bookingInfo, onClose }
 
         
 
-        <div className="modal-buttons">
-          <button className="confirm-button" onClick={onClose}>Закрити</button>
+        <div className="app-modal-actions">
+          <button type="button" className="app-modal-btn app-modal-btn--primary app-modal-btn--block" onClick={onClose}>Закрити</button>
         </div>
       </div>
     </div>

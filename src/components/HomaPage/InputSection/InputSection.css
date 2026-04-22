@@ -1,259 +1,423 @@
-
-.inputSection {
-    margin-top: clamp(84px, 9vh, 132px);
-    margin-left: clamp(16px, 4vw, 64px);
-    display: flex;
-    flex-wrap: wrap; /* Дозволяє переносити елементи */
-    gap: clamp(14px, 2vw, 30px);
-    width: min(100%, 680px);
-    height: 160px;
-    margin-right: clamp(16px, 2vw, 36px);
+/* ——— Головна: блок пошуку ——— */
+.home-search {
+  width: 100%;
+  max-width: 720px;
+  margin-top: clamp(72px, 10vh, 120px);
+  margin-left: auto;
+  margin-right: auto;
+  padding: 0 clamp(14px, 4vw, 24px);
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  box-sizing: border-box;
+  overflow-x: hidden;
+  min-width: 0;
 }
 
-.select-container {
-    position: relative;
-    width: 220px;
-    align-items: left;
+.home-search__row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: stretch;
+  gap: 12px;
+  width: 100%;
 }
-.select-container2 {
-    position: relative;
-    width: min(430px, 100%);
-    /* align-items: left; */
+
+.home-search__row--primary {
+  gap: 12px;
+}
+
+.home-search__row--secondary {
+  gap: 12px;
+  align-items: flex-end;
+}
+
+.home-search__field {
+  min-width: 0;
+  flex: 1 1 auto;
+}
+
+.home-search__field--sport {
+  flex: 1 1 160px;
+  max-width: 100%;
+}
+
+.home-search__field--search {
+  flex: 2 1 220px;
+  min-width: min(100%, 200px);
+}
+
+.home-search__field--date {
+  flex: 1 1 150px;
+  min-width: 0;
+  max-width: 100%;
+}
+
+.home-search__field--time,
+.home-search__field--duration {
+  flex: 1 1 140px;
+  min-width: min(100%, 140px);
+}
+
+.home-search__field--submit {
+  flex: 0 0 auto;
+  min-width: min(100%, 200px);
+}
+
+.home-search__sport-inner {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+  flex: 1;
+}
+
+.home-search .select-container {
+  position: relative;
+  width: 100%;
+}
+
+.home-search .select-container2 {
+  width: 100%;
 }
 
 .select-container img {
-    width: 16px;
-    height: 16px;
-    margin-right: 6px;
+  width: 16px;
+  height: 16px;
+  margin-right: 6px;
+  flex-shrink: 0;
 }
 
 .select-box {
-    background: var(--surface-solid);
-    color: var(--text);
-    padding: 0 10px;
-    border-radius: 12px;
-    cursor: pointer;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    font-weight: 600;
-    width: 100%;
-    appearance: listbox;
-    height: 44px;
-    font-size: 14px;
-    border: 1px solid var(--border);
-    box-shadow: var(--shadow);
+  background: var(--surface-solid);
+  color: var(--text);
+  padding: 0 32px 0 10px;
+  border-radius: 12px;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-weight: 600;
+  width: 100%;
+  appearance: listbox;
+  min-height: 44px;
+  height: auto;
+  font-size: 14px;
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow);
+  position: relative;
+  box-sizing: border-box;
 }
 
 .selected-sport-value {
-    display: inline-flex;
-    align-items: center;
-    min-width: 0;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .select-box-arrow {
-    margin-left: 8px;
-    flex-shrink: 0;
-    font-size: 12px;
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  margin-left: 8px;
+  flex-shrink: 0;
+  font-size: 12px;
 }
 
 .select-box:hover {
-    background: var(--surface-2-solid);
+  background: var(--surface-2-solid);
 }
 
 .select-dropdown {
-    display: none;
-    position: absolute;
-    width: 100%;
-    background: var(--surface-solid);
-    border-radius: 12px;
-    box-shadow: var(--shadow);
-    margin-top: 5px;
-    padding: 5px 0;
-    z-index: 100;
-    max-height: 200px;
-    overflow-y: auto;
-    border: 1px solid var(--border);
+  display: none;
+  position: absolute;
+  left: 0;
+  right: 0;
+  width: 100%;
+  background: var(--surface-solid);
+  border-radius: 12px;
+  box-shadow: var(--shadow);
+  margin-top: 6px;
+  padding: 5px 0;
+  z-index: 120;
+  max-height: min(240px, 50vh);
+  overflow-y: auto;
+  border: 1px solid var(--border);
 }
 
 .select-dropdown.show {
-    display: block;
-    width: 100%;
+  display: block;
 }
 
 .select-dropdown li {
-    list-style: none;
-    color: var(--text);
-    padding: 10px;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    font-size: 14px;
-    width: 100%;
+  list-style: none;
+  color: var(--text);
+  padding: 10px 12px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 14px;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .select-dropdown li:hover {
-    background: var(--surface-2-solid);
+  background: var(--surface-2-solid);
 }
 
 .select-dropdown li img {
-    width: 20px;
-    height: 20px;
-}
-
-
-.enterClubOrAddress{
-    margin-left: 44px;
-    width: 480px; 
-    height: 51px;
-    padding: 12px;
-    background: var(--surface);
-    border-radius: 15px;
-    color: var(--text);
-    height: 54.2px;
-    font-size: 18px;
-    box-sizing: border-box;
-    box-shadow: var(--shadow);
-    border: 1px solid var(--border);
+  width: 20px;
+  height: 20px;
 }
 
 .find-box {
-    background: var(--surface-solid);
-    color: var(--text);
-    border-radius: 15px;
-    display: flex;
-    align-items: center;
-    width: 100%;
-    height: 54px;
-    padding: 0 15px;
-    box-shadow: var(--shadow);
-    gap: 10px; /* Відступ між іконкою та інпутом */
-    cursor: text;
-    border: 1px solid var(--border);
+  background: var(--surface-solid);
+  color: var(--text);
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  width: 100%;
+  min-height: 44px;
+  height: auto;
+  padding: 8px 14px;
+  box-shadow: var(--shadow);
+  gap: 10px;
+  cursor: text;
+  border: 1px solid var(--border);
+  box-sizing: border-box;
 }
 
 .search-icon {
-    width: 22px;
-    height: 22px;
-    opacity: 0.6;
+  width: 22px;
+  height: 22px;
+  opacity: 0.6;
+  flex-shrink: 0;
 }
 
 .search-input {
-    flex-grow: 1; /* Заповнює всю доступну ширину */
-    background: transparent;
-    border: none;
-    outline: none;
-    font-size: 15px;
-    color: var(--text);
+  flex: 1;
+  min-width: 0;
+  background: transparent;
+  border: none;
+  outline: none;
+  font-size: 15px;
+  color: var(--text);
 }
 
 .select-container-date {
-    display: block; /* Змінюємо на block, щоб перенести на новий рядок */
-    
+  display: block;
+  width: 100%;
 }
 
 .select-container-date input[type="date"] {
-    width: 150px;
-    height: 44px;
-    padding: 0 10px;
-    background: var(--surface-solid);
-    border-radius: 12px;
-    border: none;
-    font-size: 14px;
-    color: var(--text);
-    font-weight: bold;
-    box-shadow: var(--shadow);
-    cursor: pointer;
-    border: 1px solid var(--border);
+  width: 100%;
+  max-width: 100%;
+  height: 44px;
+  padding: 0 10px;
+  background: var(--surface-solid);
+  border-radius: 12px;
+  border: none;
+  font-size: 14px;
+  color: var(--text);
+  font-weight: bold;
+  box-shadow: var(--shadow);
+  cursor: pointer;
+  border: 1px solid var(--border);
+  box-sizing: border-box;
 }
 
 .select-container-date input[type="date"]:hover {
-    background: var(--surface-2-solid);
+  background: var(--surface-2-solid);
 }
 
-/* Стилі для календаря (псевдоелементи) */
 .select-container-date input[type="date"]::-webkit-calendar-picker-indicator {
-    filter: invert(0.5); /* Колір іконки календаря */
-    cursor: pointer;
-    padding: 5px;
+  filter: invert(0.5);
+  cursor: pointer;
+  padding: 5px;
 }
 
 .select-container-date input[type="date"]:focus {
-    outline: none;
-    background: var(--surface-solid);
+  outline: none;
+  background: var(--surface-solid);
 }
 
-
 .search-wrapper {
-    position: relative;
-    display: inline-block;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 8px;
+  width: 100%;
 }
 
 .search-btn {
-    border-radius: 15px;
-    padding: 4px 20px;
-    width: 120px;
-    height: 44px;
-    background: #7fa200;
-    font-size: 17px;
-    color: #000;
-    cursor: pointer;
+  border: none;
+  border-radius: 14px;
+  padding: 10px 18px;
+  width: 100%;
+  min-height: 44px;
+  background: linear-gradient(135deg, #8fbc24, #6d9200);
+  font-size: 16px;
+  font-weight: 700;
+  color: #0b1020;
+  cursor: pointer;
+  box-shadow: var(--shadow);
+  transition: transform var(--dur-1) var(--ease-out), filter var(--dur-1) var(--ease-out);
+}
+
+.search-btn:hover {
+  filter: brightness(1.05);
+  transform: translateY(-1px);
+}
+
+.search-btn:active {
+  transform: translateY(0);
 }
 
 .home-layout {
-    display: flex;
-    align-items: flex-start;
-    justify-content: space-between;
-    gap: clamp(12px, 2vw, 24px);
-    padding-right: clamp(12px, 3vw, 48px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 0 32px;
+  box-sizing: border-box;
 }
 
 .home-side-image {
-    height: clamp(290px, 40vh, 440px);
-    margin-top: clamp(86px, 10vh, 120px);
-    margin-right: clamp(8px, 1vw, 16px);
-    object-fit: contain;
-}
-
-@media (max-width: 1200px) {
-    .home-layout {
-        flex-wrap: wrap;
-    }
-
-    .home-side-image {
-        margin-left: auto;
-        margin-right: auto;
-    }
+  width: min(100%, 380px);
+  height: auto;
+  max-height: min(320px, 42vh);
+  margin-top: 8px;
+  margin-bottom: 8px;
+  object-fit: contain;
 }
 
 .search-hint {
-    position: absolute;
-    top: calc(100% + 60px);
-    left: 44px;
-    width: 290px;
-    color: var(--text);
-    font-size: 13px;
-    line-height: 1.25;
-    pointer-events: none;
+  position: absolute;
+  top: calc(100% + 12px);
+  left: 50%;
+  transform: translateX(-50%);
+  width: min(100%, 300px);
+  color: var(--text);
+  font-size: 13px;
+  line-height: 1.25;
+  pointer-events: none;
+  z-index: 1;
 }
 
 .search-hint-bubble {
-    background: var(--surface-solid);
-    border: 1px solid var(--border);
-    box-shadow: var(--shadow);
-    padding: 10px 12px;
-    border-radius: 12px;
+  background: var(--surface-solid);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow);
+  padding: 10px 12px;
+  border-radius: 12px;
 }
 
 .search-hint-arrow {
-    position: absolute;
+  position: absolute;
+  top: -44px;
+  left: 50%;
+  margin-left: -40px;
+  width: 120px;
+  height: 56px;
+  color: var(--accent);
+}
+
+@media (min-width: 900px) {
+  .home-layout {
+    flex-direction: row;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: clamp(16px, 3vw, 40px);
+    padding: 0 clamp(12px, 3vw, 48px) 48px;
+    min-width: 0;
+    overflow-x: hidden;
+  }
+
+  .home-search {
+    margin-left: 0;
+    margin-right: 0;
+    padding-left: 0;
+    flex: 1;
+    min-width: 0;
+  }
+
+  /* Другий ряд: дозволити перенос, щоб дата не виходила за екран */
+  .home-search__row--secondary {
+    flex-wrap: wrap;
+    align-items: stretch;
+  }
+
+  .home-search__field--time,
+  .home-search__field--duration {
+    flex: 1 1 min(160px, 28vw);
+    min-width: 0;
+  }
+
+  .home-search__field--submit {
+    flex: 1 1 140px;
+    min-width: min(100%, 200px);
+  }
+
+  .home-side-image {
+    width: auto;
+    max-width: min(42%, 400px);
+    margin-top: clamp(72px, 10vh, 120px);
+    margin-left: 0;
+    margin-right: 0;
+    max-height: clamp(290px, 40vh, 440px);
+  }
+
+  .search-hint {
+    left: auto;
+    right: 0;
+    transform: none;
+    top: calc(100% + 56px);
+    width: 290px;
+  }
+
+  .search-hint-arrow {
     top: -50px;
-    left: 0px;
-    width: 140px;
-    height: 70px;
-    color: var(--accent);
+    left: 0;
+    margin-left: 0;
+  }
+}
+
+@media (max-width: 899px) {
+  .home-search {
+    margin-top: clamp(64px, 8vh, 96px);
+    padding: 0 14px;
+  }
+
+  .home-search__row--secondary {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .home-search__field--date,
+  .home-search__field--time,
+  .home-search__field--duration,
+  .home-search__field--submit {
+    flex: 1 1 100%;
+    min-width: 100%;
+    max-width: 100%;
+  }
+
+  .home-search .select-container-time-at {
+    width: 100%;
+  }
+
+  .search-hint {
+    display: none;
+  }
+
+  .search-wrapper {
+    width: 100%;
+  }
 }

@@ -1,7 +1,12 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState, useRef, useContext } from "react";
 import "./BookingPage.css";
+import "../common/mapMobileTrigger.css";
+import { LanguageContext } from "../../assets/LanguageContext.jsx";
+import { useMediaQuery } from "../../hooks/useMediaQuery.js";
+import MapFullscreenModal from "../common/MapFullscreenModal.jsx";
+import { buildGoogleMapsUrl } from "../../utils/mapsUrls.js";
 import { fetchSportFild, fetchFilteredSportFild } from "../../../services/sportFild.js";
-import { sports } from "../HomaPage/InputSection/dateTime";
+import { getCorrectType } from "../../utils/sportFieldType.js";
 
 import CitySelector from "./componentsBookingPage/CitySelector.jsx";
 import SearchFilters from "./componentsBookingPage/SearchFilters.jsx";
@@ -42,11 +47,14 @@ export function getCorrectVariantWord(count) {
   }
 }
 
-export function getCorrectType(type) {
-  return sports[type] ?? { name: "Unknown", icon: "" };
-}
+export { getCorrectType };
 
 export default function BookingPage() {
+  const { language, translations } = useContext(LanguageContext);
+  const t = translations[language];
+  const showInlineMap = useMediaQuery("(min-width: 901px)");
+  const [mapModalOpen, setMapModalOpen] = useState(false);
+
   const [searchParams, setSearchParams] = useState({
     type: null,
     searchTitleOrAddres: null,
@@ -182,16 +190,51 @@ export default function BookingPage() {
           />
         )}
       </div>
-      <div className="right-section">
-        <MapView
-          mapCenter={mapCenter}
-          userLocation={userLocation}
-          sportFild={sportFild}
-          mapRef={mapRef}
-          setMapCenter={setMapCenter}
-          setUserLocation={setUserLocation}
-          selectedCity={selectedCity}
-        />
+      <div className={`right-section${showInlineMap ? "" : " right-section--compact-map"}`}>
+        {showInlineMap && (
+          <MapView
+            mapCenter={mapCenter}
+            userLocation={userLocation}
+            sportFild={sportFild}
+            mapRef={mapRef}
+            setMapCenter={setMapCenter}
+            setUserLocation={setUserLocation}
+            selectedCity={selectedCity}
+          />
+        )}
+        {!showInlineMap && (
+          <>
+            <div className="map-mobile-card" role="region" aria-label={t.map.mapTitle}>
+              <p className="map-mobile-card__hint">{t.map.hint}</p>
+              <button
+                type="button"
+                className="map-mobile-card__btn"
+                onClick={() => setMapModalOpen(true)}
+              >
+                {t.map.openMap}
+              </button>
+            </div>
+            {mapModalOpen && (
+              <MapFullscreenModal
+                title={t.map.mapTitle}
+                onClose={() => setMapModalOpen(false)}
+                externalUrl={buildGoogleMapsUrl(mapCenter[0], mapCenter[1])}
+                externalLabel={t.map.openInMaps}
+                closeLabel={t.map.close}
+              >
+                <MapView
+                  mapCenter={mapCenter}
+                  userLocation={userLocation}
+                  sportFild={sportFild}
+                  mapRef={mapRef}
+                  setMapCenter={setMapCenter}
+                  setUserLocation={setUserLocation}
+                  selectedCity={selectedCity}
+                />
+              </MapFullscreenModal>
+            )}
+          </>
+        )}
       </div>
     </div>
   );

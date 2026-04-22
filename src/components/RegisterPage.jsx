@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { registerUser } from "../../services/authService";
 import { useContext } from "react";
 import { LanguageContext } from "../assets/LanguageContext";
+import { useToast } from "../context/ToastContext.jsx";
 
 export default function RegisterPage() {
   const navigate = useNavigate();
@@ -16,6 +17,7 @@ export default function RegisterPage() {
   const [isLoading, setIsLoading] = useState(false);
 const { language, setLanguage, translations } = useContext(LanguageContext);
   const t = translations[language];
+  const { showToast } = useToast();
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -37,8 +39,12 @@ const { language, setLanguage, translations } = useContext(LanguageContext);
       try {
         const errorObj = JSON.parse(error.message);
         setErrors(errorObj);
+        const firstMsg = Object.values(errorObj).find(Boolean);
+        if (firstMsg) showToast(String(firstMsg), "error");
       } catch {
-        setErrors({ general: error.message });
+        const msg = error.message || t.common.error;
+        setErrors({ general: msg });
+        showToast(msg, "error");
       }
     } finally {
       setIsLoading(false);

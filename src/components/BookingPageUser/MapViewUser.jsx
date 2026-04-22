@@ -64,7 +64,7 @@ export default function MapViewUser({
       center={mapCenter}
       zoom={13}
       whenCreated={(map) => {
-        mapRef.current = map;
+        if (mapRef) mapRef.current = map;
       }}
     >
       <ChangeView center={mapCenter} zoom={13} />

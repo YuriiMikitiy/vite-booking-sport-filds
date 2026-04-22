@@ -7,6 +7,7 @@ import { loginUser } from "../../services/authService";
 
 import { useContext } from "react";
 import { LanguageContext } from "../assets/LanguageContext";
+import { useToast } from "../context/ToastContext.jsx";
 
 export default function LoginPage() {
   const navigate = useNavigate();
@@ -18,6 +19,7 @@ export default function LoginPage() {
   const [isLoading, setIsLoading] = useState(false);
   const { language, setLanguage, translations } = useContext(LanguageContext);
   const t = translations[language];
+  const { showToast } = useToast();
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -36,8 +38,10 @@ export default function LoginPage() {
       await loginUser(credentials);
       navigate("/booking"); // Redirect to home after successful login
     } catch (error) {
-      setError("Invalid email or password");
-      console.log(error)
+      const msg = t.login.invalidCredentials;
+      setError(msg);
+      showToast(msg, "error");
+      console.log(error);
     } finally {
       setIsLoading(false);
     }
